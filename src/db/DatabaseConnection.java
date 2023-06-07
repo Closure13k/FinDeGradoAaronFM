@@ -29,7 +29,13 @@ public class DatabaseConnection {
      * Constructor privado para evitar la creación de instancias directamente.
      * Utiliza el patrón Singleton para garantizar una única instancia de la clase.
      */
-    private DatabaseConnection() {}
+    private DatabaseConnection() {
+        try {
+            connect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Devuelve la instancia única de DatabaseConnection.
@@ -48,7 +54,10 @@ public class DatabaseConnection {
      *
      * @throws SQLException Si ocurre un error al establecer la conexión.
      */
-    public void connect() throws SQLException {
+    private void connect() throws SQLException {
+        if(connection != null) {
+            return;
+        }
         connection = DriverManager.getConnection(
                 DB_URL_MOVIL,
                 ADMIN,
@@ -64,7 +73,9 @@ public class DatabaseConnection {
     public void disconnect() throws SQLException {
         if (connection != null) {
             connection.close();
+            connection = null;
         }
+        instance = null;
     }
 
     /**
