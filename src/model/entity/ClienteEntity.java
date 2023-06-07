@@ -42,7 +42,8 @@ public class ClienteEntity {
 
     /**
      * Devuelve la orden de borrado de un cliente de la base de datos.
-     * <br>El número de parámetros para el prepared statement es 1 (id_cliente: int).
+     * <br>El número de parámetros:
+     * <ul><li>1 (id_cliente: int).</li></ul>
      *
      * @return La consulta de borrado.
      */
@@ -59,7 +60,7 @@ public class ClienteEntity {
      */
     public static String updateQuery() {
         return "UPDATE " + TABLE_NAME
-                + " SET " + String.join(" = ?, ", Arrays.copyOfRange(FIELDS, 0, FIELDS.length - 1)) + " = ?"
+                + " SET " + String.join(" = ?, ", Arrays.copyOfRange(FIELDS, 0, FIELDS.length)) + " = ?"
                 + " WHERE " + ID_FIELD + " = ?";
     }
 

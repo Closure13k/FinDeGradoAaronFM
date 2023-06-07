@@ -12,10 +12,10 @@ public class Cliente {
     
     private int idCliente;
     private String nickname;
+    private String fotoPerfil;
     private String nombreApellidos;
     private float altura;
     private float peso;
-    private String fotoPerfil;
 
     public static Cliente fromResultSet(ResultSet rs) throws SQLException{
         Cliente cliente = new Cliente();
