@@ -37,7 +37,7 @@ public class ClienteEntity {
     public static String insertQuery() {
         return "INSERT INTO " + TABLE_NAME
                 + " (" + String.join(", ", FIELDS) + ")"
-                + " VALUES (?, ?, ?, ?, ?)";
+                + " VALUES (" + " ?,".repeat(FIELDS.length - 1) + " ?)";
     }
 
     /**
