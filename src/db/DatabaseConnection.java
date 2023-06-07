@@ -1,5 +1,6 @@
 package db;
 
+import controller.SQLExceptionController;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -34,6 +35,7 @@ public class DatabaseConnection {
             connect();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException(SQLExceptionController.readSQLException(e));
         }
     }
 
