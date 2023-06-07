@@ -57,6 +57,7 @@ public class ClienteEntity {
      * <br>Los campos y sus tipos de datos son:
      * @see #insertQuery()
      * <br> Además, guarda una referencia al id_cliente (int) para el prepared statement.
+     * @return La consulta de actualización.
      */
     public static String updateQuery() {
         return "UPDATE " + TABLE_NAME
@@ -66,7 +67,8 @@ public class ClienteEntity {
 
     /**
      * Devuelve la consulta para seleccionar todos los clientes de la base de datos.
-     * <br>Los campos y sus tipos de datos son:
+     * <br>Los campos y datos devueltos son:
+     * <ul><li>id_cliente: int</li></ul>
      * @see #insertQuery()
      */
     public static String selectQuery() {
