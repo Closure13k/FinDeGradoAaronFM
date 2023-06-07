@@ -50,7 +50,7 @@ public class DatabaseConnection {
      */
     public void connect() throws SQLException {
         connection = DriverManager.getConnection(
-                DB_URL_WIFI,
+                DB_URL_MOVIL,
                 ADMIN,
                 ADMIN_PASSWORD
         );
