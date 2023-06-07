@@ -5,33 +5,35 @@
 package model.entity;
 
 /**
- * Información de la tabla Ejercicios.
- * Guarda los nombres de los campos de la tabla en constantes para evitar errores de escritura.
+ * Información de la tabla Ejercicios. Guarda los nombres de los campos de la
+ * tabla en constantes para evitar errores de escritura.
+ *
  * @author AaronFM
  * @see model.Ejercicio
  */
 public class EjercicioEntity {
+
     private static final String TABLE_NAME = "ejercicios";
 
     private static final String ID_FIELD = "id_ejercicio";
 
     public static final String[] FIELDS = {
-            "tipo",
-            "foto_ejercicio",
-            "instrucciones",
-            "record",
-            "promedio"
+        "tipo",
+        "foto_ejercicio",
+        "instrucciones",
+        "record",
+        "promedio"
     };
 
     /**
      * Devuelve la consulta para insertar un ejercicio en la base de datos.
      * <br>Los campos y sus tipos de datos son:
      * <ul>
-     *     <li>tipo: String</li>
-     *     <li>foto_ejercicio: String</li>
-     *     <li>instrucciones: String</li>
-     *     <li>record: int</li>
-     *     <li>promedio: int</li>
+     * <li>tipo: String</li>
+     * <li>foto_ejercicio: String</li>
+     * <li>instrucciones: String</li>
+     * <li>record: int</li>
+     * <li>promedio: int</li>
      * </ul>
      * El número de parámetros para el prepared statement es 5.
      *
@@ -40,7 +42,7 @@ public class EjercicioEntity {
     public static String insertQuery() {
         return "INSERT INTO " + TABLE_NAME
                 + " (" + String.join(", ", FIELDS) + ")"
-                + " VALUES (?, ?, ?, ?, ?)";
+                + " VALUES (" + " ?,".repeat(FIELDS.length - 1) + " ?)";
     }
 
     /**
@@ -58,8 +60,10 @@ public class EjercicioEntity {
     /**
      * Orden de actualización de un ejercicio en la base de datos.
      * <br>Los campos y sus tipos de datos son:
+     *
      * @see #insertQuery()
-     * <br> Además, guarda una referencia al id_ejercicio (int) para el prepared statement.
+     * <br> Además, guarda una referencia al id_ejercicio (int) para el prepared
+     * statement.
      * @return La consulta de actualización.
      */
     public static String updateQuery() {
@@ -69,9 +73,11 @@ public class EjercicioEntity {
     }
 
     /**
-     * Devuelve la consulta para seleccionar todos los ejercicios de la base de datos.
+     * Devuelve la consulta para seleccionar todos los ejercicios de la base de
+     * datos.
      * <br>Los campos y datos devueltos son:
      * <ul><li>id_ejercicio: int</li>
+     *
      * @see #insertQuery()
      */
     public static String selectQuery() {
