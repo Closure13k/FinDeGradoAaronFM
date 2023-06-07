@@ -19,9 +19,12 @@ public class Cliente {
 
     public static Cliente fromResultSet(ResultSet rs) throws SQLException{
         Cliente cliente = new Cliente();
-        cliente.setNickname(rs.getString(1));
-        
-        
+        cliente.setIdCliente(rs.getInt("id_cliente"));
+        cliente.setNickname(rs.getString("nickname"));
+        cliente.setNombreApellidos(rs.getString("nombre_apellidos"));
+        cliente.setAltura(rs.getFloat("altura"));
+        cliente.setPeso(rs.getFloat("peso"));
+        cliente.setFotoPerfil(rs.getString("foto_perfil"));
         return cliente;
     }
     
