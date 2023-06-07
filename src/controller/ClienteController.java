@@ -21,6 +21,8 @@ public class ClienteController {
 
     private static ClienteController instance;
 
+    private List<Cliente> listadoClientes;
+
     /**
      * Singleton del controlador para no crear múltiples instancias.
      *
@@ -36,7 +38,7 @@ public class ClienteController {
     private ClienteController() {
     }
 
-    private List<Cliente> listadoClientes;
+
 
     /**
      * Recoge el listado de clientes del controlador.
@@ -71,19 +73,17 @@ public class ClienteController {
      * @return Lista de clientes.
      */
     private List<Cliente> getAllClientes() {
-        try {
-            Connection dbCon = DatabaseConnection.getInstance().getConnection();
-            try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
-                List<Cliente> clientes = new ArrayList<>();
-                if (rs.next()) {
-                    clientes = new ArrayList<>();
-                    do {
-                        Cliente cliente = Cliente.fromResultSet(rs);
-                        clientes.add(cliente);
-                    } while (rs.next());
-                }
-                return clientes;
+        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
+            List<Cliente> clientes = new ArrayList<>();
+            if (rs.next()) {
+                clientes = new ArrayList<>();
+                do {
+                    Cliente cliente = Cliente.fromResultSet(rs);
+                    clientes.add(cliente);
+                } while (rs.next());
             }
+            return clientes;
         } catch (SQLException ex) {
             throw new RuntimeException(readSQLException(ex));
         }
@@ -100,20 +100,17 @@ public class ClienteController {
      * @return cliente con la clave actualizada.
      */
     public Cliente addCliente(Cliente cliente) {
-        try {
-            Connection dbCon = DatabaseConnection.getInstance().getConnection();
-            try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.insertQuery(), Statement.RETURN_GENERATED_KEYS)) {
-                //Prepara los campos del statement.
-                prepareInsertOrUpdate(ps, cliente);
-                ps.executeUpdate();
-                try (ResultSet keys = ps.getGeneratedKeys()) {
-                    if (keys.next()) {
-                        cliente.setIdCliente(keys.getInt(1));
-                    }
+        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.insertQuery(), Statement.RETURN_GENERATED_KEYS)) {
+            //Prepara los campos del statement.
+            prepareInsertOrUpdate(ps, cliente);
+            ps.executeUpdate();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (keys.next()) {
+                    cliente.setIdCliente(keys.getInt(1));
                 }
-
-                return cliente;
             }
+            return cliente;
         } catch (SQLException ex) {
             throw new RuntimeException(readSQLException(ex));
         }
@@ -126,32 +123,33 @@ public class ClienteController {
      * @return el mismo cliente.
      */
     public Cliente updateCliente(Cliente cliente) {
-        try {
-            Connection dbCon = DatabaseConnection.getInstance().getConnection();
-            try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.updateQuery())) {
-                //Campos a actualizar. Del primero al quinto.
-                prepareInsertOrUpdate(ps, cliente);
-                //Campo del where.
-                ps.setInt(6, cliente.getIdCliente());
-                ps.executeUpdate();
-                return cliente;
-            }
+        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.updateQuery())) {
+            //Campos a actualizar. Del primero al quinto.
+            prepareInsertOrUpdate(ps, cliente);
+            //Campo del where.
+            ps.setInt(6, cliente.getIdCliente());
+            ps.executeUpdate();
+            return cliente;
         } catch (SQLException ex) {
             throw new RuntimeException(readSQLException(ex));
         }
     }
 
+    /**
+     * Borra un cliente de la base de datos.
+     * @param cliente
+     * @return el mismo cliente.
+     */
     public Cliente deleteCliente(Cliente cliente) {
-        try {
-            Connection dbCon = DatabaseConnection.getInstance().getConnection();
-            try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.deleteQuery())) {
-                ps.setInt(1, cliente.getIdCliente());
-                int result = ps.executeUpdate();
-                if (result == 0) {
-                    throw new RuntimeException("No se pudo borrar el cliente.");
-                }
-                return cliente;
+        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.deleteQuery())) {
+            ps.setInt(1, cliente.getIdCliente());
+            int result = ps.executeUpdate();
+            if (result == 0) {
+                throw new RuntimeException("No se pudo borrar el cliente.");
             }
+            return cliente;
         } catch (SQLException e) {
             throw new RuntimeException(readSQLException(e));
         }
