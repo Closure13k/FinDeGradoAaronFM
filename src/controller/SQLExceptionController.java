@@ -12,13 +12,15 @@ public class SQLExceptionController {
                 sb.append("Valor supera la capacidad del tipo de datos.\n");
             case 1048 ->
                 sb.append("Hay una o varias columnas que no admiten valores nulos.\n");
+            case 1062 ->
+                sb.append("Se está usando un valor que ya existe en la tabla.\n");
             default ->
                 sb.append("Surgió un error al trabajar contra la base de datos.\n");
 
         }
         return sb
                 .append(sqle.getClass().getSimpleName()).append("  -  ") //TODO: Remove debug marks.
-                .append("Este fue el error:\n")
+                .append("Información detallada:\n")
                 .append(sqle.getErrorCode())
                 .append(": ")
                 .append(sqle.getMessage())
