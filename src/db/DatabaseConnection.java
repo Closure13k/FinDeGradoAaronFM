@@ -34,7 +34,6 @@ public class DatabaseConnection {
         try {
             connect();
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(SQLExceptionController.readSQLException(e));
         }
     }
