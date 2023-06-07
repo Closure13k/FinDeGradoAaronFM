@@ -1,40 +1,58 @@
-
 package main;
 
+import controller.ClienteController;
+import controller.SQLExceptionController;
 import db.DatabaseConnection;
-import model.entity.ClienteEntity;
-
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Cliente;
+import model.entity.EjercicioEntity;
 
 public class Main {
+
     public static void main(String[] args) {
+        System.out.
+                printf(EjercicioEntity.insertQuery())
+                .printf("\n")
+                .printf(EjercicioEntity.selectQuery())
+                .printf("\n")
+                .printf(EjercicioEntity.deleteQuery())
+                .printf("\n")
+                .printf(EjercicioEntity.updateQuery())
+                .printf("\n")
+                .printf(EjercicioEntity.selectQuery().concat(EjercicioEntity.whereId()))
+                .printf("\n");
 
-        try {
-            DatabaseConnection.getInstance().connect();
-
-            var con = DatabaseConnection.getInstance().getConnection();
-            var ps = con.prepareStatement(ClienteEntity.insertQuery());
-            ps.setString(1, "Prueba insert2");
-            ps.setString(2, "Prueba insert2");
-            ps.setString(3, "Prueba insert2");
-            ps.setFloat(4, 1.0f);
-            ps.setFloat(5, 1.0f);
-            int i = ps.executeUpdate();
-            System.out.println("Filas insertadas: " + i);
-
-
-            DatabaseConnection.getInstance().disconnect();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        System.out.println(ClienteEntity.insertQuery());
-        System.out.println(ClienteEntity.deleteQuery());
-        System.out.println(ClienteEntity.updateQuery());
-
+        ejecutaBackendPruebas();
+        ejecutaBackendPruebas();
     }
-    
+
+    private static void ejecutaBackendPruebas() {
+        Connection con = DatabaseConnection.getInstance().getConnection();
+        try {
+            con.setAutoCommit(false);
+            Cliente cliente = new Cliente();
+            cliente.setNickname("Payaso");
+            cliente.setNombreApellidos("Loco");
+            ClienteController.getInstance().addCliente(cliente);
+            con.commit();
+            con.setAutoCommit(true);
+        } catch (SQLException rex) {
+            System.err.println(SQLExceptionController.readSQLException(rex));
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                System.err.println(SQLExceptionController.readSQLException(ex));
+            }
+        }
+        try {
+            con.setAutoCommit(true);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.err.println(SQLExceptionController.readSQLException(ex));
+        }
+    }
 }
