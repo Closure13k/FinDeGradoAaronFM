@@ -36,7 +36,7 @@ public class ClienteEntity {
      */
     public static String insertQuery() {
         return "INSERT INTO " + TABLE_NAME
-                + " (" + FIELDS[0] + ", " + FIELDS[1] + ", " + FIELDS[2] + ", " + FIELDS[3] + ", " + FIELDS[4] + ")"
+                + " (" + String.join(", ", FIELDS) + ")"
                 + " VALUES (?, ?, ?, ?, ?)";
     }
 
@@ -54,13 +54,29 @@ public class ClienteEntity {
     /**
      * Orden de actualización de un cliente en la base de datos.
      * <br>Los campos y sus tipos de datos son:
-     *
-     * @return
      * @see #insertQuery()
+     * <br> Además, guarda una referencia al id_cliente (int) para el prepared statement.
      */
     public static String updateQuery() {
         return "UPDATE " + TABLE_NAME
-                + " SET " + FIELDS[0] + " = ?, " + FIELDS[1] + " = ?, " + FIELDS[2] + " = ?, " + FIELDS[3] + " = ?, " + FIELDS[4] + " = ?"
+                + " SET " + String.join(" = ?, ", Arrays.copyOfRange(FIELDS, 0, FIELDS.length - 1)) + " = ?"
                 + " WHERE " + ID_FIELD + " = ?";
+    }
+
+    /**
+     * Devuelve la consulta para seleccionar todos los clientes de la base de datos.
+     * <br>Los campos y sus tipos de datos son:
+     * @see #insertQuery()
+     */
+    public static String selectQuery() {
+        return "SELECT "+ID_FIELD+", "+String.join(", ", FIELDS)
+                + " FROM " + TABLE_NAME;
+    }
+
+    /**
+     * Devuelve el where para seleccionar un cliente por su id.
+     */
+    public static String whereId() {
+        return " WHERE " + ID_FIELD + " = ?";
     }
 }
