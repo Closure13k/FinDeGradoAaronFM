@@ -39,9 +39,17 @@ public class Main {
         try {
             con.setAutoCommit(false);
             EjercicioController ejCon = EjercicioController.getInstance();
+            ejCon.getAllEjercicios().forEach(System.out::println);
             System.out.println(ejCon.getEjercicioByTipo("Press")
                     .map(Ejercicio::getTipo)
                     .orElseThrow());
+            
+            Ejercicio e = new Ejercicio();
+            e.setTipo("Sesión de crossfit.");
+            //e.setTipo(null); //Excepción.
+            e.setInstrucciones("Para lesionarse.");
+            
+            ejCon.addEjercicio(e);
 
             con.commit();
             con.setAutoCommit(true);
