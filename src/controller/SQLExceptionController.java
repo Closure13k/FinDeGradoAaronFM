@@ -14,7 +14,6 @@ public class SQLExceptionController {
 
         //TODO: Remove debugging checks in production.
         final int errorCode = sqle.getErrorCode();
-        System.out.println(errorCode + ": " + message);
         StringBuilder sb = new StringBuilder();
         switch (errorCode) {
             case 1406 ->
