@@ -5,6 +5,7 @@
 package controller.data;
 
 import controller.database.DatabaseController;
+import controller.exception.EntityControllersException;
 import model.Ejercicio;
 
 import java.sql.*;
@@ -44,8 +45,9 @@ public class EjercicioController {
      * Recoge el listado de ejercicios del controlador.
      *
      * @return el listado.
+     * @throws EntityControllersException si se produce un error en la consulta.
      */
-    public List<Ejercicio> getListadoEjercicios() {
+    public List<Ejercicio> getListadoEjercicios() throws EntityControllersException {
         listadoEjercicios = getAllEjercicios();
         return listadoEjercicios;
     }
@@ -57,8 +59,9 @@ public class EjercicioController {
      *
      * @param type Tipo de ejercicio a buscar.
      * @return Optional de ejercicio.
+     * @throws EntityControllersException si se produce un error en la consulta.
      */
-    public Optional<Ejercicio> getEjercicioByTipo(String type) {
+    public Optional<Ejercicio> getEjercicioByTipo(String type) throws EntityControllersException {
         if (listadoEjercicios == null) {
             getListadoEjercicios();
         }
@@ -72,8 +75,9 @@ public class EjercicioController {
      * Recupera toda la lista de ejercicios de la base de datos.
      *
      * @return Lista de ejercicios.
+     * @throws EntityControllersException si se produce un error en la consulta.
      */
-    public List<Ejercicio> getAllEjercicios() {
+    public List<Ejercicio> getAllEjercicios() throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
             List<Ejercicio> ejercicios = new ArrayList<>();
@@ -85,7 +89,7 @@ public class EjercicioController {
             }
             return ejercicios;
         } catch (SQLException ex) {
-            throw new RuntimeException(readSQLException(ex));
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
@@ -96,8 +100,9 @@ public class EjercicioController {
      *
      * @param ejercicio
      * @return el ejercicio con su id actualizado.
+     * @throws EntityControllersException si se produce un error al insertar.
      */
-    public Ejercicio addEjercicio(Ejercicio ejercicio) {
+    public Ejercicio addEjercicio(Ejercicio ejercicio) throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.insertQuery(), Statement.RETURN_GENERATED_KEYS)) {
             //Prepara los campos del statement.
@@ -110,7 +115,7 @@ public class EjercicioController {
             }
             return ejercicio;
         } catch (SQLException ex) {
-            throw new RuntimeException(readSQLException(ex));
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
@@ -119,8 +124,9 @@ public class EjercicioController {
      *
      * @param ejercicio
      * @return el mismo ejercicio.
+     * @throws EntityControllersException si se produce un error al actualizar.
      */
-    public Ejercicio updateEjercicio(Ejercicio ejercicio) {
+    public Ejercicio updateEjercicio(Ejercicio ejercicio) throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.updateQuery())) {
             //Prepara los campos del statement.
@@ -130,7 +136,7 @@ public class EjercicioController {
             ps.executeUpdate();
             return ejercicio;
         } catch (SQLException ex) {
-            throw new RuntimeException(readSQLException(ex));
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
@@ -139,16 +145,17 @@ public class EjercicioController {
      *
      * @param ejercicio
      * @return el mismo ejercicio.
+     * @throws EntityControllersException si se produce un error al borrar.
      */
-    public Ejercicio deleteEjercicio(Ejercicio ejercicio) {
+    public Ejercicio deleteEjercicio(Ejercicio ejercicio) throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.deleteQuery())) {
             ps.setInt(1, ejercicio.getIdEjercicio());
             ps.executeUpdate();
 
             return ejercicio;
-        } catch (SQLException e) {
-            throw new RuntimeException(readSQLException(e));
+        } catch (SQLException ex) {
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
