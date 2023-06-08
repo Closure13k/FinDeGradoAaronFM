@@ -51,7 +51,16 @@ public class Main {
             ce.setPeso(200);
             ce.setSeries(5);
             ce.setComentario("Probado desde controller.");
+            controller.deleteClienteEjercicio(ce);
             controller.addClienteEjercicio(ce);
+
+
+            ce.setComentario("Probado desde controller 2.");
+            ce.setCliente(ClienteController.getInstance().getClienteByNickname("user2").orElseThrow());
+            ce.setEjercicio(EjercicioController.getInstance().getEjercicioByTipo("Press Banca").orElseThrow());
+            ce.setSeries(10);
+            ce.setPeso(10);
+            System.out.println(controller.updateClienteEjercicio(ce));
 
             con.commit();
             con.setAutoCommit(true);
