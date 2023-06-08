@@ -128,7 +128,7 @@ public class EjercicioController {
             //Prepara los campos del statement.
             prepareInsertOrUpdate(ps, ejercicio);
             //Campo del where
-            ps.setInt(6, ejercicio.getIdEjercicio());
+            ps.setInt(4, ejercicio.getIdEjercicio());
             ps.executeUpdate();
             return ejercicio;
         } catch (SQLException ex) {
@@ -171,7 +171,5 @@ public class EjercicioController {
         ps.setString(1, ejercicio.getTipo());
         ps.setString(2, ejercicio.getFotoEjercicio());
         ps.setString(3, ejercicio.getInstrucciones());
-        ps.setFloat(4, ejercicio.getRecord());
-        ps.setFloat(5, ejercicio.getPromedio());
     }
 }
