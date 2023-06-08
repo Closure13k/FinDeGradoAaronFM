@@ -27,13 +27,12 @@ public class EjercicioEntity {
 
     /**
      * Devuelve la consulta para insertar un ejercicio en la base de datos.
-     * <br>Los campos y sus tipos de datos son:
+     * <br>
+     * Los campos y sus tipos de datos son:
      * <ul>
      * <li>tipo: String</li>
      * <li>foto_ejercicio: String</li>
      * <li>instrucciones: String</li>
-     * <li>record: int</li>
-     * <li>promedio: int</li>
      * </ul>
      * El número de parámetros para el prepared statement es 5.
      *
@@ -41,8 +40,8 @@ public class EjercicioEntity {
      */
     public static String insertQuery() {
         return "INSERT INTO " + TABLE_NAME
-                + " (" + String.join(", ", FIELDS) + ")"
-                + " VALUES (" + " ?,".repeat(FIELDS.length - 1) + " ?)";
+                + " (" + FIELDS[0] + ", " + FIELDS[1] + ", " + FIELDS[2] + ") "
+                + "VALUES (?, ?, ?)";
     }
 
     /**
@@ -73,8 +72,8 @@ public class EjercicioEntity {
     public static String updateQuery() {
         return "UPDATE " + TABLE_NAME
                 + " SET " + FIELDS[0] + " = ?, "
-                + " SET " + FIELDS[1] + " = ?, "
-                + " SET " + FIELDS[2] + " = ?"
+                + FIELDS[1] + " = ?, "
+                + FIELDS[2] + " = ?"
                 + " WHERE " + ID_FIELD + " = ?";
     }
 
