@@ -1,6 +1,6 @@
 package controller.data;
 
-import controller.database.DatabaseConnection;
+import controller.database.DatabaseController;
 import model.Cliente;
 import model.ClienteEjercicio;
 import model.Ejercicio;
@@ -82,7 +82,7 @@ public class ClienteEjercicioController {
      * @return Lista de cliente_ejercicio.
      */
     private List<ClienteEjercicio> getAllClienteEjercicio() {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (var ps = dbCon.prepareStatement(ClienteEjercicioEntity.selectQuery());
              var rs = ps.executeQuery()) {
             List<ClienteEjercicio> listado = new ArrayList<>();
@@ -115,7 +115,7 @@ public class ClienteEjercicioController {
      * @param clienteEjercicio el cliente_ejercicio a insertar.
      */
     public ClienteEjercicio addClienteEjercicio(ClienteEjercicio clienteEjercicio) {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEjercicioEntity.insertQuery())) {
 
             prepareInsert(clienteEjercicio, ps);
@@ -127,8 +127,15 @@ public class ClienteEjercicioController {
         }
     }
 
+    /**
+     * Actualiza un cliente_ejercicio en la base de datos.
+     * <br>
+     * Se actualiza por el id del cliente y del ejercicio.
+     * @param clienteEjercicio el cliente_ejercicio a actualizar.
+     * @return el mismo.
+     */
     public ClienteEjercicio updateClienteEjercicio(ClienteEjercicio clienteEjercicio) {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEjercicioEntity.updateQuery())) {
             prepareUpdate(clienteEjercicio, ps);
 
@@ -139,8 +146,16 @@ public class ClienteEjercicioController {
         }
     }
 
+
+    /**
+     * Borra un cliente_ejercicio de la base de datos.
+     * <br>
+     * Se borra por el id del cliente, del ejercicio y la fecha.
+     * @param clienteEjercicio el cliente_ejercicio a borrar.
+     * @return el mismo.
+     */
     public ClienteEjercicio deleteClienteEjercicio(ClienteEjercicio clienteEjercicio) {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEjercicioEntity.deleteQuery())) {
             ps.setInt(1, clienteEjercicio.getCliente().getIdCliente());
             ps.setInt(2, clienteEjercicio.getEjercicio().getIdEjercicio());
