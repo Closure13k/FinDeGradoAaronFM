@@ -144,10 +144,8 @@ public class EjercicioController {
         Connection dbCon = DatabaseConnection.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.deleteQuery())) {
             ps.setInt(1, ejercicio.getIdEjercicio());
-            int result = ps.executeUpdate();
-            if (result == 0) {
-                throw new RuntimeException("No se pudo borrar el ejercicio.");
-            }
+            ps.executeUpdate();
+
             return ejercicio;
         } catch (SQLException e) {
             throw new RuntimeException(readSQLException(e));
