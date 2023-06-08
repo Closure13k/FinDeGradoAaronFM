@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import controller.database.DatabaseController;
+import controller.exception.EntityControllersException;
 import model.Cliente;
 import model.entity.ClienteEntity;
 
@@ -42,8 +43,9 @@ public class ClienteController {
      * Recoge el listado de clientes del controlador.
      *
      * @return el listado.
+     * @throws EntityControllersException si se produce un error en la consulta.
      */
-    public List<Cliente> getListadoClientes() {
+    public List<Cliente> getListadoClientes() throws EntityControllersException {
         listadoClientes = getAllClientes();
         return listadoClientes;
     }
@@ -57,8 +59,10 @@ public class ClienteController {
      * @return Optional de cliente. Este objeto envuelve a la clase, habilitando
      * una serie de utilidades (.orElse, .orElseThrow, .map, etc.) para
      * gestionar el objeto. Asegura los null-checks.
+     *
+     * @throws EntityControllersException si se produce un error en la consulta.
      */
-    public Optional<Cliente> getClienteByNickname(String nickname) {
+    public Optional<Cliente> getClienteByNickname(String nickname) throws EntityControllersException {
         if (listadoClientes == null) {
             getListadoClientes();
         }
@@ -72,8 +76,9 @@ public class ClienteController {
      * Recupera toda la lista de clientes de la base de datos.
      *
      * @return Lista de clientes.
+     * @throws EntityControllersException si se produce un error en la consulta.
      */
-    private List<Cliente> getAllClientes() {
+    private List<Cliente> getAllClientes() throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
             List<Cliente> clientes = new ArrayList<>();
@@ -85,7 +90,7 @@ public class ClienteController {
             }
             return clientes;
         } catch (SQLException ex) {
-            throw new RuntimeException(readSQLException(ex));
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
@@ -98,8 +103,9 @@ public class ClienteController {
      *
      * @param cliente
      * @return cliente con la clave actualizada.
+     * @throws EntityControllersException si se produce un error al insertar.
      */
-    public Cliente addCliente(Cliente cliente) {
+    public Cliente addCliente(Cliente cliente) throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.insertQuery(), Statement.RETURN_GENERATED_KEYS)) {
             //Prepara los campos del statement.
@@ -112,7 +118,7 @@ public class ClienteController {
             }
             return cliente;
         } catch (SQLException ex) {
-            throw new RuntimeException(readSQLException(ex));
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
@@ -121,8 +127,9 @@ public class ClienteController {
      *
      * @param cliente
      * @return el mismo cliente.
+     * @throws EntityControllersException si se produce un error al actualizar.
      */
-    public Cliente updateCliente(Cliente cliente) {
+    public Cliente updateCliente(Cliente cliente) throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.updateQuery())) {
             //Campos a actualizar. Del primero al quinto.
@@ -132,7 +139,7 @@ public class ClienteController {
             ps.executeUpdate();
             return cliente;
         } catch (SQLException ex) {
-            throw new RuntimeException(readSQLException(ex));
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
@@ -141,16 +148,17 @@ public class ClienteController {
      *
      * @param cliente
      * @return el mismo cliente.
+     * @throws EntityControllersException si se produce un error al borrar.
      */
-    public Cliente deleteCliente(Cliente cliente) {
+    public Cliente deleteCliente(Cliente cliente) throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.deleteQuery())) {
             ps.setInt(1, cliente.getIdCliente());
             ps.executeUpdate();
 
             return cliente;
-        } catch (SQLException e) {
-            throw new RuntimeException(readSQLException(e));
+        } catch (SQLException ex) {
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
