@@ -5,7 +5,9 @@ import controller.EjercicioController;
 import controller.SQLExceptionController;
 import db.DatabaseConnection;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Cliente;
@@ -15,6 +17,13 @@ import model.entity.EjercicioEntity;
 public class Main {
 
     public static void main(String[] args) {
+
+        java.util.Date dt = new java.util.Date();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = sdf.format(dt);
+        System.out.println(currentTime);
+
+        /*
         System.out
                 .printf("Sentencias Ejercicios.")
                 .printf(EjercicioEntity.insertQuery())
@@ -29,9 +38,9 @@ public class Main {
                 .printf("\n")
                 .printf("---------------------------------------------------------")
                 .printf("\n");
-
-        ejecutaBackendPruebas();
-        ejecutaBackendPruebas();
+*/
+        //ejecutaBackendPruebas();
+        //ejecutaBackendPruebas();
     }
 
     private static void ejecutaBackendPruebas() {
@@ -39,10 +48,11 @@ public class Main {
         try {
             con.setAutoCommit(false);
             EjercicioController ejCon = EjercicioController.getInstance();
-            ejCon.getAllEjercicios().forEach(System.out::println);
-            System.out.println(ejCon.getEjercicioByTipo("Press")
-                    .map(Ejercicio::getTipo)
-                    .orElseThrow());
+            System.out.println(
+                    ejCon.getEjercicioByTipo("Cross")
+                            .map(Ejercicio::getTipo)
+                            .orElseGet(() -> "No hay ejercicio con ese tipo.")
+            );
             
             Ejercicio e = new Ejercicio();
             e.setTipo("Sesión de crossfit.");
@@ -50,6 +60,17 @@ public class Main {
             e.setInstrucciones("Para lesionarse.");
             
             ejCon.addEjercicio(e);
+            System.out.println(e.getIdEjercicio());
+
+            e.setInstrucciones("Nuevas instrucciones.");
+            ejCon.updateEjercicio(e);
+
+            System.out.println(
+                    ejCon.getEjercicioByTipo("Cross")
+                            .map(Ejercicio::getTipo)
+                            .orElseGet(() -> "No hay ejercicio con ese tipo.")
+            );
+
 
             con.commit();
             con.setAutoCommit(true);
