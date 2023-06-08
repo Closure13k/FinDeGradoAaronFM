@@ -1,16 +1,13 @@
 package main;
 
 import controller.data.ClienteController;
-import controller.data.ClienteEjercicioController;
-import controller.data.EjercicioController;
 import controller.exception.SQLExceptionController;
-import controller.database.DatabaseConnection;
+import controller.database.DatabaseController;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
 
-import model.ClienteEjercicio;
+import model.Cliente;
 
 public class Main {
 
@@ -33,34 +30,38 @@ public class Main {
                 .printf("---------------------------------------------------------")
                 .printf("\n");
 */
-        ejecutaBackendPruebas();
+        try {
+            ejecutaBackendPruebas();
+        } catch (RuntimeException rex) {
+            System.err.println(rex.getMessage());
+        }
         //ejecutaBackendPruebas();
     }
 
     private static void ejecutaBackendPruebas() {
-        Connection con = DatabaseConnection.getInstance().getConnection();
+        Connection con = DatabaseController.getInstance().getConnection();
         try {
             con.setAutoCommit(false);
 
-            var controller = ClienteEjercicioController.getInstance();
-            var ce = new ClienteEjercicio();
-            ce.setCliente(ClienteController.getInstance().getClienteByNickname("user1").orElseThrow());
-            ce.setEjercicio(EjercicioController.getInstance().getEjercicioByTipo("Sentadilla").orElseThrow());
+            var cliente = new Cliente();
+            //TODO: Sólo tengo que meter este campo obligatorio.
+            cliente.setNickname("Manolo");
+            cliente.setNombreApellidos("Manuel García");
+            System.out.println(cliente.getIdCliente());
+            ClienteController.getInstance().addCliente(cliente);
+            //TODO: Tras llamar al addCliente, se actualiza el id de Manolo.
+            System.out.println(cliente.getIdCliente());
+            //TODO: Subimos la foto al FTP.
+            //FTPController.getInstance().uploadFile(imagen);
+            //TODO: Tras recoger la foto.
+            cliente.setFotoPerfil("patatas");
+            //TODO: Actualizamos el cliente.
+            ClienteController.getInstance().updateCliente(cliente);
 
-            ce.setFecha(new Date(System.currentTimeMillis()));
-            ce.setPeso(200);
-            ce.setSeries(5);
-            ce.setComentario("Probado desde controller.");
-            controller.deleteClienteEjercicio(ce);
-            controller.addClienteEjercicio(ce);
 
 
-            ce.setComentario("Probado desde controller 2.");
-            ce.setCliente(ClienteController.getInstance().getClienteByNickname("user2").orElseThrow());
-            ce.setEjercicio(EjercicioController.getInstance().getEjercicioByTipo("Press Banca").orElseThrow());
-            ce.setSeries(10);
-            ce.setPeso(10);
-            System.out.println(controller.updateClienteEjercicio(ce));
+
+
 
             con.commit();
             con.setAutoCommit(true);
