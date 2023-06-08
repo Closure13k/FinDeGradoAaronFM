@@ -43,20 +43,7 @@ public class Main {
         try {
             con.setAutoCommit(false);
 
-            var cliente = new Cliente();
-            //TODO: Sólo tengo que meter este campo obligatorio.
-            cliente.setNickname("Manolo");
-            cliente.setNombreApellidos("Manuel García");
-            System.out.println(cliente.getIdCliente());
-            ClienteController.getInstance().addCliente(cliente);
-            //TODO: Tras llamar al addCliente, se actualiza el id de Manolo.
-            System.out.println(cliente.getIdCliente());
-            //TODO: Subimos la foto al FTP.
-            //FTPController.getInstance().uploadFile(imagen);
-            //TODO: Tras recoger la foto.
-            cliente.setFotoPerfil("patatas");
-            //TODO: Actualizamos el cliente.
-            ClienteController.getInstance().updateCliente(cliente);
+     
 
 
 
