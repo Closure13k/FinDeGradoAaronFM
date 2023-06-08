@@ -2,7 +2,9 @@ package model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Date;
+
+import static model.entity.ClienteEjercicioEntity.*;
 
 public class ClienteEjercicio {
     private Cliente cliente;
@@ -24,10 +26,10 @@ public class ClienteEjercicio {
      */
     public static ClienteEjercicio fromResultSet(ResultSet rs) throws SQLException {
         ClienteEjercicio clienteEjercicio = new ClienteEjercicio();
-        clienteEjercicio.setFecha(rs.getDate("fecha"));
-        clienteEjercicio.setSeries(rs.getInt("series"));
-        clienteEjercicio.setPeso(rs.getFloat("peso"));
-        clienteEjercicio.setComentario(rs.getString("comentario"));
+        clienteEjercicio.setFecha(rs.getDate(FECHA));
+        clienteEjercicio.setSeries(rs.getInt(SERIES));
+        clienteEjercicio.setPeso(rs.getFloat(PESO));
+        clienteEjercicio.setComentario(rs.getString(COMENTARIO));
 
         return clienteEjercicio;
     }
