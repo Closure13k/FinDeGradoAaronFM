@@ -1,27 +1,21 @@
 package main;
 
-import controller.ClienteController;
-import controller.EjercicioController;
-import controller.SQLExceptionController;
-import db.DatabaseConnection;
+import controller.data.ClienteController;
+import controller.data.ClienteEjercicioController;
+import controller.data.EjercicioController;
+import controller.exception.SQLExceptionController;
+import controller.database.DatabaseConnection;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Cliente;
-import model.Ejercicio;
-import model.entity.EjercicioEntity;
+
+import model.ClienteEjercicio;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        java.util.Date dt = new java.util.Date();
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentTime = sdf.format(dt);
-        System.out.println(currentTime);
 
         /*
         System.out
@@ -39,7 +33,7 @@ public class Main {
                 .printf("---------------------------------------------------------")
                 .printf("\n");
 */
-        //ejecutaBackendPruebas();
+        ejecutaBackendPruebas();
         //ejecutaBackendPruebas();
     }
 
@@ -47,30 +41,17 @@ public class Main {
         Connection con = DatabaseConnection.getInstance().getConnection();
         try {
             con.setAutoCommit(false);
-            EjercicioController ejCon = EjercicioController.getInstance();
-            System.out.println(
-                    ejCon.getEjercicioByTipo("Cross")
-                            .map(Ejercicio::getTipo)
-                            .orElseGet(() -> "No hay ejercicio con ese tipo.")
-            );
-            
-            Ejercicio e = new Ejercicio();
-            e.setTipo("Sesión de crossfit.");
-            //e.setTipo(null); //Excepción.
-            e.setInstrucciones("Para lesionarse.");
-            
-            ejCon.addEjercicio(e);
-            System.out.println(e.getIdEjercicio());
 
-            e.setInstrucciones("Nuevas instrucciones.");
-            ejCon.updateEjercicio(e);
+            var controller = ClienteEjercicioController.getInstance();
+            var ce = new ClienteEjercicio();
+            ce.setCliente(ClienteController.getInstance().getClienteByNickname("user1").orElseThrow());
+            ce.setEjercicio(EjercicioController.getInstance().getEjercicioByTipo("Sentadilla").orElseThrow());
 
-            System.out.println(
-                    ejCon.getEjercicioByTipo("Cross")
-                            .map(Ejercicio::getTipo)
-                            .orElseGet(() -> "No hay ejercicio con ese tipo.")
-            );
-
+            ce.setFecha(new Date(System.currentTimeMillis()));
+            ce.setPeso(200);
+            ce.setSeries(5);
+            ce.setComentario("Probado desde controller.");
+            controller.addClienteEjercicio(ce);
 
             con.commit();
             con.setAutoCommit(true);
