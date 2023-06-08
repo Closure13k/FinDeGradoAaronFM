@@ -85,6 +85,7 @@ public class EjercicioEntity {
                 + " FROM " + TABLE_NAME;
     }
 
+    //TODO: Posible borrado.
     /**
      * Devuelve el where para seleccionar un ejercicio por su id.
      */
