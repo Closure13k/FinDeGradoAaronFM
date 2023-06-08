@@ -27,10 +27,9 @@ public class SQLExceptionController {
 
         }
         return sb
-                .append(sqle.getClass().getSimpleName()).append("  -  ") //TODO: Remove debug marks.
                 .append("Información detallada:\n")
-                .append(errorCode)
-                .append(": ")
+                .append(sqle.getClass().getSimpleName())
+                .append("\nErrorCode ").append(errorCode).append(":\n")
                 .append(message)
                 .toString();
 
