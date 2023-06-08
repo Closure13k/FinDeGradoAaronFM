@@ -60,15 +60,21 @@ public class EjercicioEntity {
     /**
      * Orden de actualización de un ejercicio en la base de datos.
      * <br>Los campos y sus tipos de datos son:
-     *
-     * @see #insertQuery()
-     * <br> Además, guarda una referencia al id_ejercicio (int) para el prepared
-     * statement.
+     * <ul>
+     * <li>tipo: String</li>
+     * <li>foto: String</li>
+     * <li>instrucciones: String</li>
+     * </ul>
+     * <br> Promedio y record se actualizan al recibir entradas en la N:M.
+     * <br> Además, recoge una referencia al id_ejercicio (int) para el where.
+     * <br> Número de campos para prepared: 4.
      * @return La consulta de actualización.
      */
     public static String updateQuery() {
         return "UPDATE " + TABLE_NAME
-                + " SET " + String.join(" = ?, ", FIELDS) + " = ?"
+                + " SET " + FIELDS[0] + " = ?, "
+                + " SET " + FIELDS[1] + " = ?, "
+                + " SET " + FIELDS[2] + " = ?"
                 + " WHERE " + ID_FIELD + " = ?";
     }
 
