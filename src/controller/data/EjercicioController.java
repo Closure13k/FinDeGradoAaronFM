@@ -4,6 +4,7 @@
  */
 package controller.data;
 
+import controller.database.DatabaseController;
 import model.Ejercicio;
 
 import java.sql.*;
@@ -11,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import controller.database.DatabaseConnection;
 import model.entity.EjercicioEntity;
 
 import static controller.exception.SQLExceptionController.readSQLException;
@@ -74,7 +74,7 @@ public class EjercicioController {
      * @return Lista de ejercicios.
      */
     public List<Ejercicio> getAllEjercicios() {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
             List<Ejercicio> ejercicios = new ArrayList<>();
             if (rs.next()) {
@@ -98,7 +98,7 @@ public class EjercicioController {
      * @return el ejercicio con su id actualizado.
      */
     public Ejercicio addEjercicio(Ejercicio ejercicio) {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.insertQuery(), Statement.RETURN_GENERATED_KEYS)) {
             //Prepara los campos del statement.
             prepareInsertOrUpdate(ps, ejercicio);
@@ -121,7 +121,7 @@ public class EjercicioController {
      * @return el mismo ejercicio.
      */
     public Ejercicio updateEjercicio(Ejercicio ejercicio) {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.updateQuery())) {
             //Prepara los campos del statement.
             prepareInsertOrUpdate(ps, ejercicio);
@@ -141,7 +141,7 @@ public class EjercicioController {
      * @return el mismo ejercicio.
      */
     public Ejercicio deleteEjercicio(Ejercicio ejercicio) {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.deleteQuery())) {
             ps.setInt(1, ejercicio.getIdEjercicio());
             ps.executeUpdate();
