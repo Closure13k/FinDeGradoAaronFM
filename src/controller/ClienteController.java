@@ -38,8 +38,6 @@ public class ClienteController {
     private ClienteController() {
     }
 
-
-
     /**
      * Recoge el listado de clientes del controlador.
      *
@@ -55,15 +53,18 @@ public class ClienteController {
      * lista.
      * <br> Se gestionará la acción en la llamada del método.
      *
-     * @param id
+     * @param nickname
      * @return Optional de cliente. Este objeto envuelve a la clase, habilitando
      * una serie de utilidades (.orElse, .orElseThrow, .map, etc.) para
      * gestionar el objeto. Asegura los null-checks.
      */
-    public Optional<Cliente> getCliente(int id) {
-        return getListadoClientes()
+    public Optional<Cliente> getClienteByNickname(String nickname) {
+        if (listadoClientes == null) {
+            getListadoClientes();
+        }
+        return listadoClientes
                 .stream()
-                .filter(c -> c.getIdCliente() == id)
+                .filter(c -> c.getNickname().contains(nickname))
                 .findFirst();
     }
 
@@ -138,6 +139,7 @@ public class ClienteController {
 
     /**
      * Borra un cliente de la base de datos.
+     *
      * @param cliente
      * @return el mismo cliente.
      */
