@@ -22,6 +22,7 @@ import static controller.SQLExceptionController.readSQLException;
  * @author Administrador
  */
 public class EjercicioController {
+
     private static EjercicioController instance;
 
     private List<Ejercicio> listadoEjercicios;
@@ -52,20 +53,25 @@ public class EjercicioController {
     }
 
     /**
-     * Actualiza la lista de ejercicios a usar y luego filtra dentro de la propia lista.
+     * Actualiza la lista de ejercicios a usar y luego filtra dentro de la
+     * propia lista.
      *
-     * @param id
+     * @param type
      * @return
      */
-    public Optional<Ejercicio> getEjercicio(int id) {
-        return getListadoEjercicios()
+    public Optional<Ejercicio> getEjercicioByTipo(String type) {
+        if (listadoEjercicios == null) {
+            getListadoEjercicios();
+        }
+        return listadoEjercicios
                 .stream()
-                .filter(e -> e.getIdEjercicio() == id)
+                .filter(e -> e.getTipo().contains(type))
                 .findFirst();
     }
 
     /**
      * Recupera toda la lista de ejercicios de la base de datos.
+     *
      * @return Lista de ejercicios.
      */
     public List<Ejercicio> getAllEjercicios() {
@@ -89,10 +95,11 @@ public class EjercicioController {
      * Añade un ejercicio a la base de datos.
      * <br>
      * Una vez añadido, se le asigna el id generado a la instancia.
+     *
      * @param ejercicio
      * @return el ejercicio con su id actualizado.
      */
-    public Ejercicio addEjercicio(Ejercicio ejercicio){
+    public Ejercicio addEjercicio(Ejercicio ejercicio) {
         Connection dbCon = DatabaseConnection.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.insertQuery(), Statement.RETURN_GENERATED_KEYS)) {
             //Prepara los campos del statement.
@@ -111,10 +118,11 @@ public class EjercicioController {
 
     /**
      * Recibe un ejercicio y lo actualiza en la base de datos.
+     *
      * @param ejercicio
      * @return el mismo ejercicio.
      */
-    public Ejercicio updateEjercicio(Ejercicio ejercicio){
+    public Ejercicio updateEjercicio(Ejercicio ejercicio) {
         Connection dbCon = DatabaseConnection.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.updateQuery())) {
             //Prepara los campos del statement.
@@ -130,15 +138,16 @@ public class EjercicioController {
 
     /**
      * Borra un ejercicio de la base de datos.
+     *
      * @param ejercicio
      * @return el mismo ejercicio.
      */
-    public Ejercicio deleteEjercicio(Ejercicio ejercicio){
+    public Ejercicio deleteEjercicio(Ejercicio ejercicio) {
         Connection dbCon = DatabaseConnection.getInstance().getConnection();
-        try(PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.deleteQuery())){
+        try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.deleteQuery())) {
             ps.setInt(1, ejercicio.getIdEjercicio());
             int result = ps.executeUpdate();
-            if(result == 0){
+            if (result == 0) {
                 throw new RuntimeException("No se pudo borrar el ejercicio.");
             }
             return ejercicio;
@@ -147,10 +156,9 @@ public class EjercicioController {
         }
     }
 
-
     /**
-     * Para evitar repetir código en insert y update. Ambos usan todos los campos
-     * para sus set/insert.
+     * Para evitar repetir código en insert y update. Ambos usan todos los
+     * campos para sus set/insert.
      * <br>
      *
      * @see EjercicioEntity#insertQuery()
