@@ -1,6 +1,7 @@
 package controller.data;
 
 import controller.database.DatabaseController;
+import controller.exception.EntityControllersException;
 import model.Cliente;
 import model.ClienteEjercicio;
 import model.Ejercicio;
@@ -43,7 +44,7 @@ public class ClienteEjercicioController {
      *
      * @return el listado.
      */
-    public List<ClienteEjercicio> getListadoClienteEjercicio() {
+    public List<ClienteEjercicio> getListadoClienteEjercicio() throws EntityControllersException {
         listadoClienteEjercicio = getAllClienteEjercicio();
         return listadoClienteEjercicio;
     }
@@ -53,7 +54,7 @@ public class ClienteEjercicioController {
      * propia lista.
      * <br> Se gestionará la acción en la llamada del método.
      */
-    public List<ClienteEjercicio> getEjerciciosByClienteId(int idCliente) {
+    public List<ClienteEjercicio> getEjerciciosByClienteId(int idCliente) throws EntityControllersException {
         if (listadoClienteEjercicio == null) {
             getListadoClienteEjercicio();
         }
@@ -67,7 +68,7 @@ public class ClienteEjercicioController {
      * propia lista.
      * <br> Se gestionará la acción en la llamada del método.
      */
-    public List<ClienteEjercicio> getClientesByEjercicioId(int idEjercicio) {
+    public List<ClienteEjercicio> getClientesByEjercicioId(int idEjercicio) throws EntityControllersException {
         if (listadoClienteEjercicio == null) {
             getListadoClienteEjercicio();
         }
@@ -80,8 +81,9 @@ public class ClienteEjercicioController {
      * Recupera toda la lista de cliente_ejercicio de la base de datos.
      *
      * @return Lista de cliente_ejercicio.
+     * @throws EntityControllersException si hay algún error en la consulta.
      */
-    private List<ClienteEjercicio> getAllClienteEjercicio() {
+    private List<ClienteEjercicio> getAllClienteEjercicio() throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (var ps = dbCon.prepareStatement(ClienteEjercicioEntity.selectQuery());
              var rs = ps.executeQuery()) {
@@ -104,8 +106,8 @@ public class ClienteEjercicioController {
                 } while (rs.next());
             }
             return listado;
-        } catch (SQLException e) {
-            throw new RuntimeException(readSQLException(e));
+        } catch (SQLException ex) {
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
@@ -113,8 +115,9 @@ public class ClienteEjercicioController {
      * Inserta un cliente_ejercicio en la base de datos.
      *
      * @param clienteEjercicio el cliente_ejercicio a insertar.
+     * @throws EntityControllersException si hay algún error durante el proceso.
      */
-    public ClienteEjercicio addClienteEjercicio(ClienteEjercicio clienteEjercicio) {
+    public ClienteEjercicio addClienteEjercicio(ClienteEjercicio clienteEjercicio) throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEjercicioEntity.insertQuery())) {
 
@@ -122,8 +125,8 @@ public class ClienteEjercicioController {
 
             ps.executeUpdate();
             return clienteEjercicio;
-        } catch (SQLException e) {
-            throw new RuntimeException(readSQLException(e));
+        } catch (SQLException ex) {
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
@@ -133,16 +136,17 @@ public class ClienteEjercicioController {
      * Se actualiza por el id del cliente y del ejercicio.
      * @param clienteEjercicio el cliente_ejercicio a actualizar.
      * @return el mismo.
+     * @throws EntityControllersException con el mensaje de error ya reconocido.
      */
-    public ClienteEjercicio updateClienteEjercicio(ClienteEjercicio clienteEjercicio) {
+    public ClienteEjercicio updateClienteEjercicio(ClienteEjercicio clienteEjercicio) throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEjercicioEntity.updateQuery())) {
             prepareUpdate(clienteEjercicio, ps);
 
             ps.executeUpdate();
             return clienteEjercicio;
-        } catch (SQLException e) {
-            throw new RuntimeException(readSQLException(e));
+        } catch (SQLException ex) {
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
@@ -153,8 +157,9 @@ public class ClienteEjercicioController {
      * Se borra por el id del cliente, del ejercicio y la fecha.
      * @param clienteEjercicio el cliente_ejercicio a borrar.
      * @return el mismo.
+     * @throws EntityControllersException con el mensaje de error ya reconocido.
      */
-    public ClienteEjercicio deleteClienteEjercicio(ClienteEjercicio clienteEjercicio) {
+    public ClienteEjercicio deleteClienteEjercicio(ClienteEjercicio clienteEjercicio) throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEjercicioEntity.deleteQuery())) {
             ps.setInt(1, clienteEjercicio.getCliente().getIdCliente());
@@ -163,8 +168,8 @@ public class ClienteEjercicioController {
 
             ps.executeUpdate();
             return clienteEjercicio;
-        } catch (SQLException e) {
-            throw new RuntimeException(readSQLException(e));
+        } catch (SQLException ex) {
+            throw new EntityControllersException(readSQLException(ex));
         }
     }
 
@@ -174,7 +179,7 @@ public class ClienteEjercicioController {
      *
      * @param clienteEjercicio el cliente_ejercicio a insertar.
      * @param ps               el PreparedStatement.
-     * @throws SQLException
+     * @throws SQLException si hay algún error durante el proceso.
      */
     private void prepareInsert(ClienteEjercicio clienteEjercicio, PreparedStatement ps) throws SQLException {
         ps.setInt(1, clienteEjercicio.getCliente().getIdCliente());
@@ -190,7 +195,7 @@ public class ClienteEjercicioController {
      *
      * @param clienteEjercicio el cliente_ejercicio a actualizar.
      * @param ps               el PreparedStatement.
-     * @throws SQLException
+     * @throws SQLException si hay algún error durante el proceso.
      */
     private static void prepareUpdate(ClienteEjercicio clienteEjercicio, PreparedStatement ps) throws SQLException {
         ps.setInt(1, clienteEjercicio.getSeries());
