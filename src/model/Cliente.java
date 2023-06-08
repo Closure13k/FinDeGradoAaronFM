@@ -1,7 +1,11 @@
 package model;
 
+import model.entity.ClienteEntity;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static model.entity.ClienteEntity.*;
 
 /**
  * Representación de la tabla Clientes.
@@ -19,12 +23,12 @@ public class Cliente {
 
     public static Cliente fromResultSet(ResultSet rs) throws SQLException{
         Cliente cliente = new Cliente();
-        cliente.setIdCliente(rs.getInt("id_cliente"));
-        cliente.setNickname(rs.getString("nickname"));
-        cliente.setNombreApellidos(rs.getString("nombre_apellidos"));
-        cliente.setAltura(rs.getFloat("altura"));
-        cliente.setPeso(rs.getFloat("peso"));
-        cliente.setFotoPerfil(rs.getString("foto_perfil"));
+        cliente.setIdCliente(rs.getInt(ID_CLIENTE));
+        cliente.setNickname(rs.getString(NICKNAME));
+        cliente.setNombreApellidos(rs.getString(NOMBRE_APELLIDOS));
+        cliente.setAltura(rs.getFloat(ALTURA));
+        cliente.setPeso(rs.getFloat(PESO_CLIENTE));
+        cliente.setFotoPerfil(rs.getString(FOTO_PERFIL));
         return cliente;
     }
     
