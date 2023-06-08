@@ -76,6 +76,7 @@ public class ClienteEntity {
                 + " FROM " + TABLE_NAME;
     }
 
+    //TODO: Posible borrado.
     /**
      * Devuelve el where para seleccionar un cliente por su id.
      */
