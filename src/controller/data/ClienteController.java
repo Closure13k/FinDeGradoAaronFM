@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import controller.database.DatabaseConnection;
+import controller.database.DatabaseController;
 import model.Cliente;
 import model.entity.ClienteEntity;
 
@@ -74,7 +74,7 @@ public class ClienteController {
      * @return Lista de clientes.
      */
     private List<Cliente> getAllClientes() {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
             List<Cliente> clientes = new ArrayList<>();
             if (rs.next()) {
@@ -100,7 +100,7 @@ public class ClienteController {
      * @return cliente con la clave actualizada.
      */
     public Cliente addCliente(Cliente cliente) {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.insertQuery(), Statement.RETURN_GENERATED_KEYS)) {
             //Prepara los campos del statement.
             prepareInsertOrUpdate(ps, cliente);
@@ -123,7 +123,7 @@ public class ClienteController {
      * @return el mismo cliente.
      */
     public Cliente updateCliente(Cliente cliente) {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.updateQuery())) {
             //Campos a actualizar. Del primero al quinto.
             prepareInsertOrUpdate(ps, cliente);
@@ -143,7 +143,7 @@ public class ClienteController {
      * @return el mismo cliente.
      */
     public Cliente deleteCliente(Cliente cliente) {
-        Connection dbCon = DatabaseConnection.getInstance().getConnection();
+        Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.deleteQuery())) {
             ps.setInt(1, cliente.getIdCliente());
             ps.executeUpdate();
