@@ -13,17 +13,20 @@ package model.entity;
  */
 public class EjercicioEntity {
 
-    private static final String TABLE_NAME = "ejercicios";
+    public static final String EJERCICIOS = "ejercicios";
 
-    private static final String ID_FIELD = "id_ejercicio";
+    public static final String ID_EJERCICIO = "id_ejercicio";
 
-    public static final String[] FIELDS = {
-        "tipo",
-        "foto_ejercicio",
-        "instrucciones",
-        "record",
-        "promedio"
-    };
+    public static final String TIPO = "tipo";
+
+    public static final String FOTO = "foto_ejercicio";
+
+    public static final String INSTRUCCIONES = "instrucciones";
+
+    public static final String RECORD = "record";
+
+    public static final String PROMEDIO = "promedio";
+
 
     /**
      * Devuelve la consulta para insertar un ejercicio en la base de datos.
@@ -34,14 +37,16 @@ public class EjercicioEntity {
      * <li>foto_ejercicio: String</li>
      * <li>instrucciones: String</li>
      * </ul>
-     * El número de parámetros para el prepared statement es 5.
+     * El número de parámetros para el prepared statement es 3.
      *
      * @return La consulta de inserción.
      */
     public static String insertQuery() {
-        return "INSERT INTO " + TABLE_NAME
-                + " (" + FIELDS[0] + ", " + FIELDS[1] + ", " + FIELDS[2] + ") "
-                + "VALUES (?, ?, ?)";
+        return "INSERT INTO " + EJERCICIOS
+                + " (" + TIPO
+                + ", " + FOTO
+                + ", " + INSTRUCCIONES
+                + ") VALUES (?, ?, ?)";
     }
 
     /**
@@ -52,8 +57,8 @@ public class EjercicioEntity {
      * @return La consulta de borrado.
      */
     public static String deleteQuery() {
-        return "DELETE FROM " + TABLE_NAME
-                + " WHERE " + ID_FIELD + " = ?";
+        return "DELETE FROM " + EJERCICIOS
+                + " WHERE " + ID_EJERCICIO + " = ?";
     }
 
     /**
@@ -70,11 +75,11 @@ public class EjercicioEntity {
      * @return La consulta de actualización.
      */
     public static String updateQuery() {
-        return "UPDATE " + TABLE_NAME
-                + " SET " + FIELDS[0] + " = ?, "
-                + FIELDS[1] + " = ?, "
-                + FIELDS[2] + " = ?"
-                + " WHERE " + ID_FIELD + " = ?";
+        return "UPDATE " + EJERCICIOS
+                + " SET " + TIPO + " = ?"
+                + ", " + FOTO + " = ?"
+                + ", " + INSTRUCCIONES + " = ?"
+                + " WHERE " + ID_EJERCICIO + " = ?";
     }
 
     /**
@@ -86,16 +91,14 @@ public class EjercicioEntity {
      * @see #insertQuery()
      */
     public static String selectQuery() {
-        return "SELECT " + ID_FIELD + ", " + String.join(", ", FIELDS)
-                + " FROM " + TABLE_NAME;
+        return "SELECT " + ID_EJERCICIO
+                + " ," + TIPO
+                + " ," + FOTO
+                + " ," + INSTRUCCIONES
+                + " ," + RECORD
+                + " ," + PROMEDIO
+                + " FROM " + EJERCICIOS;
     }
 
-    //TODO: Posible borrado.
-    /**
-     * Devuelve el where para seleccionar un ejercicio por su id.
-     */
-    public static String whereId() {
-        return " WHERE " + ID_FIELD + " = ?";
-    }
 
 }
