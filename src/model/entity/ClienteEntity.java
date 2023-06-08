@@ -1,7 +1,5 @@
 package model.entity;
 
-import java.util.Arrays;
-
 /**
  * Información de la tabla Clientes.
  * Guarda los nombres de los campos de la tabla en constantes para evitar errores de escritura.
@@ -10,15 +8,14 @@ import java.util.Arrays;
  * @see model.Cliente
  */
 public class ClienteEntity {
-    private static final String TABLE_NAME = "clientes";
-    private static final String ID_FIELD = "id_cliente";
-    public static final String[] FIELDS = {
-            "nickname",
-            "foto_perfil",
-            "nombre_apellidos",
-            "altura",
-            "peso"
-    };
+    public static final String CLIENTES = "clientes";
+    public static final String ID_CLIENTE = "id_cliente";
+
+    public static final String NICKNAME = "nickname";
+    public static final String FOTO_PERFIL = "foto_perfil";
+    public static final String NOMBRE_APELLIDOS = "nombre_apellidos";
+    public static final String ALTURA = "altura";
+    public static final String PESO_CLIENTE = "peso_cliente";
 
     /**
      * Devuelve la consulta para insertar un cliente en la base de datos.
@@ -35,9 +32,13 @@ public class ClienteEntity {
      * @return La consulta de inserción.
      */
     public static String insertQuery() {
-        return "INSERT INTO " + TABLE_NAME
-                + " (" + String.join(", ", FIELDS) + ")"
-                + " VALUES (" + " ?,".repeat(FIELDS.length - 1) + " ?)";
+        return "INSERT INTO " + CLIENTES
+                + " (" + NICKNAME
+                + ", " + FOTO_PERFIL
+                + ", " + NOMBRE_APELLIDOS
+                + ", " + ALTURA
+                + ", " + PESO_CLIENTE
+                + ") VALUES (?, ?, ?, ?, ?)";
     }
 
     /**
@@ -48,8 +49,8 @@ public class ClienteEntity {
      * @return La consulta de borrado.
      */
     public static String deleteQuery() {
-        return "DELETE FROM " + TABLE_NAME
-                + " WHERE " + ID_FIELD + " = ?";
+        return "DELETE FROM " + CLIENTES
+                + " WHERE " + ID_CLIENTE + " = ?";
     }
 
     /**
@@ -60,9 +61,13 @@ public class ClienteEntity {
      * @return La consulta de actualización.
      */
     public static String updateQuery() {
-        return "UPDATE " + TABLE_NAME
-                + " SET " + String.join(" = ?, ", Arrays.copyOfRange(FIELDS, 0, FIELDS.length)) + " = ?"
-                + " WHERE " + ID_FIELD + " = ?";
+        return "UPDATE " + CLIENTES
+                + " SET " + NICKNAME + " = ?"
+                + ", " + FOTO_PERFIL + " = ?"
+                + ", " + NOMBRE_APELLIDOS + " = ?"
+                + ", " + ALTURA + " = ?"
+                + ", " + PESO_CLIENTE + " = ?"
+                + " WHERE " + ID_CLIENTE + " = ?";
     }
 
     /**
@@ -72,15 +77,13 @@ public class ClienteEntity {
      * @see #insertQuery()
      */
     public static String selectQuery() {
-        return "SELECT "+ID_FIELD+", "+String.join(", ", FIELDS)
-                + " FROM " + TABLE_NAME;
+        return "SELECT "+ ID_CLIENTE +
+                ", " + NICKNAME +
+                ", " + FOTO_PERFIL +
+                ", " + NOMBRE_APELLIDOS +
+                ", " + ALTURA +
+                ", " + PESO_CLIENTE
+                + " FROM " + CLIENTES;
     }
 
-    //TODO: Posible borrado.
-    /**
-     * Devuelve el where para seleccionar un cliente por su id.
-     */
-    public static String whereId() {
-        return " WHERE " + ID_FIELD + " = ?";
-    }
 }
