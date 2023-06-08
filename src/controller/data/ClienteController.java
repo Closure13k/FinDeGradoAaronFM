@@ -146,10 +146,8 @@ public class ClienteController {
         Connection dbCon = DatabaseConnection.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.deleteQuery())) {
             ps.setInt(1, cliente.getIdCliente());
-            int result = ps.executeUpdate();
-            if (result == 0) {
-                throw new RuntimeException("No se pudo borrar el cliente.");
-            }
+            ps.executeUpdate();
+
             return cliente;
         } catch (SQLException e) {
             throw new RuntimeException(readSQLException(e));
