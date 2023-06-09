@@ -173,6 +173,11 @@ public class Principal extends javax.swing.JFrame {
         pnlDataDetails.add(pnlSearchLogo, "logo");
         pnlSearchLogo.getAccessibleContext().setAccessibleName("pnlSearchLogo");
 
+        pnlClienteDetails.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                pnlClienteDetailsComponentHidden(evt);
+            }
+        });
         pnlClienteDetails.setLayout(new java.awt.GridBagLayout());
 
         lblClienteNickname.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -352,6 +357,11 @@ public class Principal extends javax.swing.JFrame {
 
         pnlDataDetails.add(pnlClienteDetails, "cliente");
 
+        pnlEjercicioDetails.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                pnlEjercicioDetailsComponentHidden(evt);
+            }
+        });
         pnlEjercicioDetails.setLayout(new java.awt.GridBagLayout());
 
         lblEjercicioTipo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -576,6 +586,14 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRemoveEjercicioActionPerformed
 
+    private void pnlClienteDetailsComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_pnlClienteDetailsComponentHidden
+        clearClienteFields();
+    }//GEN-LAST:event_pnlClienteDetailsComponentHidden
+
+    private void pnlEjercicioDetailsComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_pnlEjercicioDetailsComponentHidden
+        clearEjercicioFields();
+    }//GEN-LAST:event_pnlEjercicioDetailsComponentHidden
+
     //TODO: Remove MAIN CALL.
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -677,7 +695,7 @@ public class Principal extends javax.swing.JFrame {
                 listModel.addAll(
                         isClienteTable
                                 ? ClienteController.getInstance().getListadoClientes()
-                                : EjercicioController.getInstance().getAllEjercicios()
+                                : EjercicioController.getInstance().getListadoEjercicios()
                 );
                 lstData.setModel(listModel);
 
@@ -692,18 +710,16 @@ public class Principal extends javax.swing.JFrame {
         };
     }
 
-    private void tablesButtonsEnabledState(boolean enabled) {
-        btnTableClientes.setEnabled(enabled);
-        btnTableEjercicios.setEnabled(enabled);
-    }
-
+    /**
+     * Carga la relación según el objeto seleccionado.
+     * @param selectedValue 
+     */
     private void refreshDetailsPanel(Object selectedValue) {
         try {
             ClienteEjercicioController controller = ClienteEjercicioController.getInstance();
             List<ClienteEjercicio> ejercicios;
             if (selectedValue instanceof Cliente c) {
                 updateClienteDetails(c);
-                
                 ejercicios = controller.getEjerciciosByClienteId(c.getIdCliente());
 
                 listModelRelacion.removeAllElements();
@@ -725,21 +741,56 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Alterna el estado de los botones mientras se procesa una tarea.
+     * @param enabled si se activan o no.
+     */
+    private void tablesButtonsEnabledState(boolean enabled) {
+        btnTableClientes.setEnabled(enabled);
+        btnTableEjercicios.setEnabled(enabled);
+    }
+
+    /**
+     * Carga los campos de un cliente.
+     * La lista de relación se carga en
+     * @see #refreshDetailsPanel(java.lang.Object)
+     * @param c 
+     */
     private void updateClienteDetails(Cliente c) {
-        txtClienteId.setText(c.getIdCliente()+"");
+        txtClienteId.setText(c.getIdCliente() + "");
         txtClienteNickname.setText(c.getNickname());
         txtClienteNombre.setText(c.getNombreApellidos());
-        txtClienteAltura.setText(c.getAltura()+"");
-        txtClientePeso.setText(c.getPeso()+"");
-        
+        txtClienteAltura.setText(c.getAltura() + "");
+        txtClientePeso.setText(c.getPeso() + "");
+
     }
 
     private void updateEjercicioDetails(Ejercicio e) {
-        txtEjercicioId.setText(e.getIdEjercicio()+"");
+        txtEjercicioId.setText(e.getIdEjercicio() + "");
         txtEjercicioTipo.setText(e.getTipo());
         txtEjercicioInstrucciones.setText(e.getInstrucciones());
-        txtEjercicioPromedio.setText(e.getPromedio()+"");
-        txtEjercicioRecord.setText(e.getRecord()+"");
+        txtEjercicioPromedio.setText(e.getPromedio() + "");
+        txtEjercicioRecord.setText(e.getRecord() + "");
+    }
+
+    private void clearEjercicioFields() {
+        txtEjercicioId.setText("");
+        txtEjercicioTipo.setText("");
+        txtEjercicioInstrucciones.setText("");
+        txtEjercicioPromedio.setText("");
+        txtEjercicioRecord.setText("");
+        listModelRelacion.removeAllElements();
+        lstClienteRelacion.setModel(listModelRelacion);
+    }
+
+    private void clearClienteFields() {
+        txtClienteId.setText("");
+        txtClienteNickname.setText("");
+        txtClienteNombre.setText("");
+        txtClienteAltura.setText("");
+        txtClientePeso.setText("");
+        listModelRelacion.removeAllElements();
+        lstClienteRelacion.setModel(listModelRelacion);
     }
 
 }
