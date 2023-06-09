@@ -12,12 +12,7 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/FinDeGradoAaronFM/src/main/Main.java</file>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/FinDeGradoAaronFM/src/model/entity/ClienteEntity.java</file>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/FinDeGradoAaronFM/src/controller/EjercicioController.java</file>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/FinDeGradoAaronFM/src/controller/ClienteController.java</file>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/FinDeGradoAaronFM/src/model/entity/EjercicioEntity.java</file>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/FinDeGradoAaronFM/src/db/DatabaseConnection.java</file>
+            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/FinDeGradoAaronFM/src/controller/ftp/FTPController.java</file>
         </group>
     </open-files>
 </project-private>
