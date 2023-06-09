@@ -77,7 +77,7 @@ public class EjercicioController {
      * @return Lista de ejercicios.
      * @throws EntityControllersException si se produce un error en la consulta.
      */
-    public List<Ejercicio> getAllEjercicios() throws EntityControllersException {
+    private List<Ejercicio> getAllEjercicios() throws EntityControllersException {
         Connection dbCon = DatabaseController.getInstance().getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
             List<Ejercicio> ejercicios = new ArrayList<>();
