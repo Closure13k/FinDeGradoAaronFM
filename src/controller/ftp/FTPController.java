@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class FTPController {
+public final class FTPController {
 
     //************************************************************
     //TODO: Remove plain text properties in production.
