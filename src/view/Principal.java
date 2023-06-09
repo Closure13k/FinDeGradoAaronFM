@@ -5,17 +5,24 @@
 package view;
 
 import controller.data.ClienteController;
+import controller.data.ClienteEjercicioController;
 import controller.data.EjercicioController;
 import controller.exception.EntityControllersException;
+import controller.renderer.CustomListRenderers;
 import java.awt.CardLayout;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import model.Cliente;
+import model.ClienteEjercicio;
+import model.Ejercicio;
 
 /**
  *
- * @author Administrador
+ * @author AaronFM
  */
 public class Principal extends javax.swing.JFrame {
 
@@ -23,6 +30,11 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         cardLayout = (CardLayout) pnlDataDetails.getLayout();
         listModel = new DefaultListModel<>();
+        listModelRelacion = new DefaultListModel<>();
+        lstData.setCellRenderer(CustomListRenderers.INSTANCE);
+        lstClienteRelacion.setCellRenderer(CustomListRenderers.INSTANCE);
+        lstEjercicioRelacion.setCellRenderer(CustomListRenderers.INSTANCE);
+
     }
 
     /**
@@ -66,7 +78,25 @@ public class Principal extends javax.swing.JFrame {
         lstClienteRelacion = new javax.swing.JList<>();
         pnlClienteFoto = new javax.swing.JPanel();
         lblClienteFoto = new javax.swing.JLabel();
+        btnEditCliente = new javax.swing.JButton();
+        btnRemoveCliente = new javax.swing.JButton();
         pnlEjercicioDetails = new javax.swing.JPanel();
+        lblEjercicioTipo = new javax.swing.JLabel();
+        txtEjercicioTipo = new javax.swing.JTextField();
+        lblEjercicioId = new javax.swing.JLabel();
+        txtEjercicioId = new javax.swing.JTextField();
+        lblEjercicioInstrucciones = new javax.swing.JLabel();
+        txtEjercicioInstrucciones = new javax.swing.JTextField();
+        lblEjercicioRecord = new javax.swing.JLabel();
+        txtEjercicioRecord = new javax.swing.JTextField();
+        lblEjercicioPromedio = new javax.swing.JLabel();
+        txtEjercicioPromedio = new javax.swing.JTextField();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        lstEjercicioRelacion = new javax.swing.JList<>();
+        pnlEjercicioFoto = new javax.swing.JPanel();
+        lblEjercicioFoto = new javax.swing.JLabel();
+        btnEditEjercicio = new javax.swing.JButton();
+        btnRemoveEjercicio = new javax.swing.JButton();
         menu = new javax.swing.JMenuBar();
         menuItemConfig = new javax.swing.JMenu();
         menuItemHelp = new javax.swing.JMenu();
@@ -112,10 +142,13 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setMinimumSize(new java.awt.Dimension(100, 100));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(50, 50));
 
-        lstData.setModel(new javax.swing.AbstractListModel<Object>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        lstData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstData.setSelectionBackground(new java.awt.Color(255, 255, 255));
+        lstData.setSelectionForeground(new java.awt.Color(255, 153, 0));
+        lstData.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstDataValueChanged(evt);
+            }
         });
         jScrollPane1.setViewportView(lstData);
 
@@ -216,6 +249,7 @@ public class Principal extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipady = 6;
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlClienteDetails.add(lblClienteAltura, gridBagConstraints);
@@ -256,11 +290,9 @@ public class Principal extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlClienteDetails.add(txtClientePeso, gridBagConstraints);
 
-        lstClienteRelacion.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        lstClienteRelacion.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstClienteRelacion.setSelectionBackground(new java.awt.Color(255, 255, 255));
+        lstClienteRelacion.setSelectionForeground(new java.awt.Color(255, 153, 0));
         jScrollPane3.setViewportView(lstClienteRelacion);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -294,18 +326,205 @@ public class Principal extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlClienteDetails.add(pnlClienteFoto, gridBagConstraints);
 
+        btnEditCliente.setText("Editar");
+        btnEditCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditClienteActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlClienteDetails.add(btnEditCliente, gridBagConstraints);
+
+        btnRemoveCliente.setText("Borrar");
+        btnRemoveCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveClienteActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlClienteDetails.add(btnRemoveCliente, gridBagConstraints);
+
         pnlDataDetails.add(pnlClienteDetails, "cliente");
 
-        javax.swing.GroupLayout pnlEjercicioDetailsLayout = new javax.swing.GroupLayout(pnlEjercicioDetails);
-        pnlEjercicioDetails.setLayout(pnlEjercicioDetailsLayout);
-        pnlEjercicioDetailsLayout.setHorizontalGroup(
-            pnlEjercicioDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 674, Short.MAX_VALUE)
-        );
-        pnlEjercicioDetailsLayout.setVerticalGroup(
-            pnlEjercicioDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 403, Short.MAX_VALUE)
-        );
+        pnlEjercicioDetails.setLayout(new java.awt.GridBagLayout());
+
+        lblEjercicioTipo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblEjercicioTipo.setText("Tipo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.ipady = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(lblEjercicioTipo, gridBagConstraints);
+
+        txtEjercicioTipo.setEditable(false);
+        txtEjercicioTipo.setBackground(new java.awt.Color(255, 255, 255));
+        txtEjercicioTipo.setText("Tipo");
+        txtEjercicioTipo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 203;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(txtEjercicioTipo, gridBagConstraints);
+
+        lblEjercicioId.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblEjercicioId.setText("ID");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 6;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(lblEjercicioId, gridBagConstraints);
+
+        txtEjercicioId.setEditable(false);
+        txtEjercicioId.setBackground(new java.awt.Color(255, 255, 255));
+        txtEjercicioId.setText("ID");
+        txtEjercicioId.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(txtEjercicioId, gridBagConstraints);
+
+        lblEjercicioInstrucciones.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblEjercicioInstrucciones.setText("Instrucciones");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 6;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(lblEjercicioInstrucciones, gridBagConstraints);
+
+        txtEjercicioInstrucciones.setEditable(false);
+        txtEjercicioInstrucciones.setBackground(new java.awt.Color(255, 255, 255));
+        txtEjercicioInstrucciones.setText("Instrucciones");
+        txtEjercicioInstrucciones.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 231;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(txtEjercicioInstrucciones, gridBagConstraints);
+
+        lblEjercicioRecord.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblEjercicioRecord.setText("Record");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 6;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(lblEjercicioRecord, gridBagConstraints);
+
+        txtEjercicioRecord.setEditable(false);
+        txtEjercicioRecord.setBackground(new java.awt.Color(255, 255, 255));
+        txtEjercicioRecord.setText("Record");
+        txtEjercicioRecord.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 48;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(txtEjercicioRecord, gridBagConstraints);
+
+        lblEjercicioPromedio.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblEjercicioPromedio.setText("Promedio");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 6;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(lblEjercicioPromedio, gridBagConstraints);
+
+        txtEjercicioPromedio.setEditable(false);
+        txtEjercicioPromedio.setBackground(new java.awt.Color(255, 255, 255));
+        txtEjercicioPromedio.setText("Promedio");
+        txtEjercicioPromedio.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 188;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(txtEjercicioPromedio, gridBagConstraints);
+
+        lstEjercicioRelacion.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstEjercicioRelacion.setSelectionForeground(new java.awt.Color(255, 153, 0));
+        jScrollPane4.setViewportView(lstEjercicioRelacion);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 484;
+        gridBagConstraints.ipady = 147;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(jScrollPane4, gridBagConstraints);
+
+        pnlEjercicioFoto.setLayout(new java.awt.BorderLayout());
+
+        lblEjercicioFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblEjercicioFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/exercise.png"))); // NOI18N
+        lblEjercicioFoto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        pnlEjercicioFoto.add(lblEjercicioFoto, java.awt.BorderLayout.CENTER);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(pnlEjercicioFoto, gridBagConstraints);
+
+        btnEditEjercicio.setText("Editar");
+        btnEditEjercicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditEjercicioActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(btnEditEjercicio, gridBagConstraints);
+
+        btnRemoveEjercicio.setText("Borrar");
+        btnRemoveEjercicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveEjercicioActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        pnlEjercicioDetails.add(btnRemoveEjercicio, gridBagConstraints);
 
         pnlDataDetails.add(pnlEjercicioDetails, "ejercicio");
 
@@ -326,21 +545,37 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTableClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTableClientesActionPerformed
-
-        new Thread(
-                loadJListTask("cliente")
-        ).start();
-
+        runTask(loadJListTask("cliente"));
     }//GEN-LAST:event_btnTableClientesActionPerformed
 
-
     private void btnTableEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTableEjerciciosActionPerformed
-
-        new Thread(
-                loadJListTask("ejercicio")
-        ).start();
-
+        runTask(loadJListTask("ejercicio"));
     }//GEN-LAST:event_btnTableEjerciciosActionPerformed
+
+    private void lstDataValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstDataValueChanged
+        if (!evt.getValueIsAdjusting()) {
+            Object selectedValue = lstData.getSelectedValue();
+            refreshDetailsPanel(selectedValue);
+        }
+
+    }//GEN-LAST:event_lstDataValueChanged
+
+    private void btnEditClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditClienteActionPerformed
+
+    }//GEN-LAST:event_btnEditClienteActionPerformed
+
+    private void btnRemoveClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveClienteActionPerformed
+
+    }//GEN-LAST:event_btnRemoveClienteActionPerformed
+
+    private void btnEditEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditEjercicioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditEjercicioActionPerformed
+
+    private void btnRemoveEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveEjercicioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRemoveEjercicioActionPerformed
+
     //TODO: Remove MAIN CALL.
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -349,7 +584,7 @@ public class Principal extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -370,9 +605,14 @@ public class Principal extends javax.swing.JFrame {
         });
     }
 
+    DefaultListModel<Object> listModelRelacion;
     DefaultListModel<Object> listModel;
     CardLayout cardLayout;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditCliente;
+    private javax.swing.JButton btnEditEjercicio;
+    private javax.swing.JButton btnRemoveCliente;
+    private javax.swing.JButton btnRemoveEjercicio;
     private javax.swing.JButton btnTableClientes;
     private javax.swing.JButton btnTableEjercicios;
     private javax.swing.Box.Filler filler1;
@@ -381,15 +621,23 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblClienteAltura;
     private javax.swing.JLabel lblClienteFoto;
     private javax.swing.JLabel lblClienteId;
     private javax.swing.JLabel lblClienteNickname;
     private javax.swing.JLabel lblClienteNombre;
     private javax.swing.JLabel lblClientePeso;
+    private javax.swing.JLabel lblEjercicioFoto;
+    private javax.swing.JLabel lblEjercicioId;
+    private javax.swing.JLabel lblEjercicioInstrucciones;
+    private javax.swing.JLabel lblEjercicioPromedio;
+    private javax.swing.JLabel lblEjercicioRecord;
+    private javax.swing.JLabel lblEjercicioTipo;
     private javax.swing.JLabel lblSearchIcon;
-    private javax.swing.JList<String> lstClienteRelacion;
+    private javax.swing.JList<Object> lstClienteRelacion;
     private javax.swing.JList<Object> lstData;
+    private javax.swing.JList<Object> lstEjercicioRelacion;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenu menuItemConfig;
     private javax.swing.JMenu menuItemHelp;
@@ -399,6 +647,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel pnlDataDetails;
     private javax.swing.JPanel pnlDataList;
     private javax.swing.JPanel pnlEjercicioDetails;
+    private javax.swing.JPanel pnlEjercicioFoto;
     private javax.swing.JPanel pnlSearchLogo;
     private javax.swing.JPanel pnlTableButtons;
     private javax.swing.Box.Filler pnlTablesFillLeft;
@@ -408,12 +657,22 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField txtClienteNickname;
     private javax.swing.JTextField txtClienteNombre;
     private javax.swing.JTextField txtClientePeso;
+    private javax.swing.JTextField txtEjercicioId;
+    private javax.swing.JTextField txtEjercicioInstrucciones;
+    private javax.swing.JTextField txtEjercicioPromedio;
+    private javax.swing.JTextField txtEjercicioRecord;
+    private javax.swing.JTextField txtEjercicioTipo;
     // End of variables declaration//GEN-END:variables
+
+    public void runTask(Runnable task) {
+        new Thread(task).start();
+    }
 
     public Runnable loadJListTask(String cardTarget) {
         boolean isClienteTable = cardTarget.equals("cliente");
         return (Runnable) () -> {
             try {
+                tablesButtonsEnabledState(false);
                 listModel.removeAllElements();
                 listModel.addAll(
                         isClienteTable
@@ -421,14 +680,66 @@ public class Principal extends javax.swing.JFrame {
                                 : EjercicioController.getInstance().getAllEjercicios()
                 );
                 lstData.setModel(listModel);
+
                 btnTableClientes.setEnabled(!isClienteTable);
                 btnTableEjercicios.setEnabled(isClienteTable);
-                
+
+                cardLayout.show(pnlDataDetails, isClienteTable ? "cliente" : "ejercicio");
             } catch (EntityControllersException ex) {
+                tablesButtonsEnabledState(true);
                 JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             }
-            cardLayout.show(pnlDataDetails, "cliente");
         };
+    }
+
+    private void tablesButtonsEnabledState(boolean enabled) {
+        btnTableClientes.setEnabled(enabled);
+        btnTableEjercicios.setEnabled(enabled);
+    }
+
+    private void refreshDetailsPanel(Object selectedValue) {
+        try {
+            ClienteEjercicioController controller = ClienteEjercicioController.getInstance();
+            List<ClienteEjercicio> ejercicios;
+            if (selectedValue instanceof Cliente c) {
+                updateClienteDetails(c);
+                
+                ejercicios = controller.getEjerciciosByClienteId(c.getIdCliente());
+
+                listModelRelacion.removeAllElements();
+                listModelRelacion.addAll(ejercicios);
+                lstClienteRelacion.setModel(listModelRelacion);
+            }
+
+            if (selectedValue instanceof Ejercicio e) {
+                updateEjercicioDetails(e);
+                ejercicios = controller.getClientesByEjercicioId(e.getIdEjercicio());
+
+                listModelRelacion.removeAllElements();
+                listModelRelacion.addAll(ejercicios);
+                lstEjercicioRelacion.setModel(listModelRelacion);
+            }
+
+        } catch (EntityControllersException ex) {
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+        }
+    }
+
+    private void updateClienteDetails(Cliente c) {
+        txtClienteId.setText(c.getIdCliente()+"");
+        txtClienteNickname.setText(c.getNickname());
+        txtClienteNombre.setText(c.getNombreApellidos());
+        txtClienteAltura.setText(c.getAltura()+"");
+        txtClientePeso.setText(c.getPeso()+"");
+        
+    }
+
+    private void updateEjercicioDetails(Ejercicio e) {
+        txtEjercicioId.setText(e.getIdEjercicio()+"");
+        txtEjercicioTipo.setText(e.getTipo());
+        txtEjercicioInstrucciones.setText(e.getInstrucciones());
+        txtEjercicioPromedio.setText(e.getPromedio()+"");
+        txtEjercicioRecord.setText(e.getRecord()+"");
     }
 
 }
