@@ -16,7 +16,7 @@ import java.sql.SQLException;
  ******************************************************************************/
 public class DatabaseController {
     // URLs de la base de datos
-    private static final String DB_URL_WIFI = "jdbc:mysql://192.168.0.28:3306/TFG";
+    private static final String DB_URL_WIFI = "jdbc:mysql://192.168.0.25:3306/TFG";
     private static final String DB_URL_MOVIL = "jdbc:mysql://192.168.235.131:3306/TFG";
 
     // Credenciales de administrador
@@ -62,7 +62,7 @@ public class DatabaseController {
             return;
         }
         connection = DriverManager.getConnection(
-                DB_URL_MOVIL,
+                DB_URL_WIFI,
                 ADMIN,
                 ADMIN_PASSWORD
         );
@@ -71,7 +71,7 @@ public class DatabaseController {
     /**
      * Cierra la conexión con la base de datos.
      *
-     * @throws SQLException Si ocurre un error al cerrar la conexión.
+     * @throws controller.exception.EntityControllersException
      */
     public void disconnect() throws EntityControllersException  {
         try{
