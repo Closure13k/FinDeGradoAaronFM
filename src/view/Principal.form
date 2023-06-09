@@ -254,6 +254,9 @@
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="pnlClienteDetails">
+              <Events>
+                <EventHandler event="componentHidden" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="pnlClienteDetailsComponentHidden"/>
+              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
                   <CardConstraints cardName="cliente"/>
@@ -505,6 +508,9 @@
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="pnlEjercicioDetails">
+              <Events>
+                <EventHandler event="componentHidden" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="pnlEjercicioDetailsComponentHidden"/>
+              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
                   <CardConstraints cardName="ejercicio"/>
