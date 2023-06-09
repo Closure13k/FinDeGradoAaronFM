@@ -1,5 +1,6 @@
 package controller.database;
 
+import controller.exception.EntityControllersException;
 import controller.exception.SQLExceptionController;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,11 +31,11 @@ public class DatabaseController {
      * Constructor privado para evitar la creación de instancias directamente.
      * Utiliza el patrón Singleton para garantizar una única instancia de la clase.
      */
-    private DatabaseController() {
+    private DatabaseController() throws EntityControllersException {
         try {
             connect();
         } catch (SQLException e) {
-            throw new RuntimeException(SQLExceptionController.readSQLException(e));
+            throw new EntityControllersException(SQLExceptionController.readSQLException(e));
         }
     }
 
@@ -42,8 +43,9 @@ public class DatabaseController {
      * Devuelve la instancia única de DatabaseController.
      *
      * @return La instancia única de DatabaseController.
+     * @throws controller.exception.EntityControllersException
      */
-    public static DatabaseController getInstance() {
+    public static DatabaseController getInstance() throws EntityControllersException {
         if (instance == null) {
             instance = new DatabaseController();
         }
@@ -71,12 +73,16 @@ public class DatabaseController {
      *
      * @throws SQLException Si ocurre un error al cerrar la conexión.
      */
-    public void disconnect() throws SQLException {
+    public void disconnect() throws EntityControllersException  {
+        try{
         if (connection != null) {
             connection.close();
             connection = null;
         }
         instance = null;
+        } catch (SQLException ex){
+            throw new EntityControllersException(ex.getMessage());
+        }
     }
 
     /**
