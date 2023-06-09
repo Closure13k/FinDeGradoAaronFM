@@ -1,6 +1,8 @@
 package controller.exception;
 
-public class FTPControllerException extends RuntimeException {
+import java.io.IOException;
+
+public class FTPControllerException extends IOException {
     public FTPControllerException(String message) {
         super(message);
     }
