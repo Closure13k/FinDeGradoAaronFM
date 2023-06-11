@@ -1,6 +1,8 @@
 package controller.config;
 
 import config.ProjectStateConfiguration;
+import controller.exception.ConfigurationControllerException;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,7 +12,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.Properties;
+import javax.naming.ConfigurationException;
 import javax.swing.JOptionPane;
+
+import static controller.exception.ConfigurationControllerException.*;
 
 public class ConfigurationController {
 
@@ -85,5 +90,108 @@ public class ConfigurationController {
             }
         }
     }
+    
+    /**
+     * Lista de propiedades. Getters.
+     */
+    public String getDatabaseIP() throws ConfigurationControllerException {
+        String ip = properties.getProperty("db.ip");
+        if(ip == null){
+            throw new ConfigurationControllerException(MISSING + DB_IP);
+        }
+        return ip;
+    }
+
+    public String getDatabasePort() throws ConfigurationControllerException {
+        String port = properties.getProperty("db.port");
+        if(port == null){
+            throw new ConfigurationControllerException(MISSING + DB_PORT);
+        }
+        return port;
+    }
+
+    public String getDatabaseUser() throws ConfigurationControllerException {
+        String user = properties.getProperty("db.user");
+        if(user == null){
+            throw new ConfigurationControllerException(MISSING + DB_USER);
+        }
+        return user;
+    }
+
+    public String getDatabasePassword() throws ConfigurationControllerException {
+        String password = properties.getProperty("db.password");
+        if(password == null){
+            throw new ConfigurationControllerException(MISSING + DB_PASSWORD);
+        }
+        return password;
+    }
+
+    public String getFtpIP() throws ConfigurationControllerException {
+        String ip = properties.getProperty("ftp.ip");
+        if(ip == null){
+            throw new ConfigurationControllerException(MISSING + FTP_IP);
+        }
+        return ip;
+    }
+
+    public String getFtpPort() throws ConfigurationControllerException {
+        String port = properties.getProperty("ftp.port");
+        if(port == null){
+            throw new ConfigurationControllerException(MISSING + FTP_PORT);
+        }
+        return port;
+    }
+
+    public String getFtpUser() throws ConfigurationControllerException {
+        String user = properties.getProperty("ftp.user");
+        if(user == null){
+            throw new ConfigurationControllerException(MISSING + FTP_USER);
+        }
+        return user;
+    }
+
+    public String getFtpPassword() throws ConfigurationControllerException {
+        String password = properties.getProperty("ftp.password");
+        if(password == null){
+            throw new ConfigurationControllerException(MISSING + FTP_PASSWORD);
+        }
+        return password;
+    }
+
+    /**
+     * Lista de propiedades. Setters.
+     */
+    public void setDatabaseIP(String ip) {
+        properties.setProperty("db.ip", ip);
+    }
+
+    public void setDatabasePort(String port) {
+        properties.setProperty("db.port", port);
+    }
+
+    public void setDatabaseUser(String user) {
+        properties.setProperty("db.user", user);
+    }
+
+    public void setDatabasePassword(String password) {
+        properties.setProperty("db.password", password);
+    }
+
+    public void setFtpIP(String ip) {
+        properties.setProperty("ftp.ip", ip);
+    }
+
+    public void setFtpPort(String port) {
+        properties.setProperty("ftp.port", port);
+    }
+
+    public void setFtpUser(String user) {
+        properties.setProperty("ftp.user", user);
+    }
+
+    public void setFtpPassword(String password) {
+        properties.setProperty("ftp.password", password);
+    }
+
 
 }
