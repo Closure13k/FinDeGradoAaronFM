@@ -1,6 +1,7 @@
 package controller.data;
 
 import controller.database.DatabaseController;
+import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
 import model.Cliente;
 import model.ClienteEjercicio;
@@ -22,6 +23,7 @@ import static controller.exception.SQLExceptionController.readSQLException;
 public class ClienteEjercicioController {
     private static ClienteEjercicioController instance;
 
+    private DatabaseController databaseController;
     private List<ClienteEjercicio> listadoClienteEjercicio;
 
     /**
@@ -29,14 +31,15 @@ public class ClienteEjercicioController {
      *
      * @return el controlador.
      */
-    public static ClienteEjercicioController getInstance() {
+    public static ClienteEjercicioController getInstance() throws EntityControllersException, ConfigurationControllerException {
         if (instance == null) {
             instance = new ClienteEjercicioController();
         }
         return instance;
     }
 
-    private ClienteEjercicioController() {
+    private ClienteEjercicioController() throws EntityControllersException, ConfigurationControllerException {
+        databaseController = DatabaseController.getInstance();
     }
 
     /**
@@ -84,7 +87,7 @@ public class ClienteEjercicioController {
      * @throws EntityControllersException si hay algún error en la consulta.
      */
     private List<ClienteEjercicio> getAllClienteEjercicio() throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (var ps = dbCon.prepareStatement(ClienteEjercicioEntity.selectQuery());
              var rs = ps.executeQuery()) {
             List<ClienteEjercicio> listado = new ArrayList<>();
@@ -118,7 +121,7 @@ public class ClienteEjercicioController {
      * @throws EntityControllersException si hay algún error durante el proceso.
      */
     public ClienteEjercicio addClienteEjercicio(ClienteEjercicio clienteEjercicio) throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEjercicioEntity.insertQuery())) {
 
             prepareInsert(clienteEjercicio, ps);
@@ -139,7 +142,7 @@ public class ClienteEjercicioController {
      * @throws EntityControllersException con el mensaje de error ya reconocido.
      */
     public ClienteEjercicio updateClienteEjercicio(ClienteEjercicio clienteEjercicio) throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEjercicioEntity.updateQuery())) {
             prepareUpdate(clienteEjercicio, ps);
 
@@ -160,7 +163,7 @@ public class ClienteEjercicioController {
      * @throws EntityControllersException con el mensaje de error ya reconocido.
      */
     public ClienteEjercicio deleteClienteEjercicio(ClienteEjercicio clienteEjercicio) throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEjercicioEntity.deleteQuery())) {
             ps.setInt(1, clienteEjercicio.getCliente().getIdCliente());
             ps.setInt(2, clienteEjercicio.getEjercicio().getIdEjercicio());
