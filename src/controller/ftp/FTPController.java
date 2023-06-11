@@ -53,6 +53,7 @@ public final class FTPController {
      */
     private FTPController() throws FTPControllerException, ConfigurationControllerException {
         try {
+            configurationController = ConfigurationController.getInstance();
             ftp = new FTPClient();
             connect();
         } catch (FTPControllerException e) {
@@ -131,9 +132,14 @@ public final class FTPController {
 
     public File downloadImage(String ftpFolder, String imageName) throws FTPControllerException {
         try {
-            if (!ftp.changeWorkingDirectory(ftpFolder)) {
-                throw new FTPControllerException("No se pudo acceder a la carpeta.");
+            System.out.println(ftpFolder + ": " + imageName);
+            System.out.println(ftp.printWorkingDirectory());
+            if (!ftp.printWorkingDirectory().equals("/" + ftpFolder)) {
+                if (!ftp.changeWorkingDirectory(ftpFolder)) {
+                    throw new FTPControllerException("No se pudo acceder a la carpeta.");
+                }
             }
+
             File imageFile = new File(imageName);
             if (!ftp.retrieveFile(imageName, new FileOutputStream(imageFile))) {
                 throw new FTPControllerException("No se pudo descargar la imagen.");
