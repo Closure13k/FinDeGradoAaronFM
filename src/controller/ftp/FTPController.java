@@ -8,6 +8,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import java.io.*;
 
 public class FTPController {
+
     /**
      * Instancia única de FTPController (patrón Singleton).
      */
@@ -116,18 +117,12 @@ public class FTPController {
 
     public InputStream downloadImage(String ftpFolder, String imageName) throws FTPControllerException {
         try {
-            System.out.println(ftpFolder + ": " + imageName);
-            System.out.println(ftp.printWorkingDirectory());
-            if (!ftp.printWorkingDirectory().equals("/" + ftpFolder)) {
-                if (!ftp.changeWorkingDirectory(ftpFolder)) {
-                    throw new FTPControllerException("No se pudo acceder a la carpeta.");
-                }
+
+            if (!ftp.changeWorkingDirectory(ftpFolder)) {
+                //throw new FTPControllerException("No se pudo acceder a la carpeta.");
             }
 
             InputStream fileStream = ftp.retrieveFileStream(imageName);
-            if (fileStream == null) {
-                throw new FTPControllerException("No se pudo descargar la imagen.");
-            }
             return fileStream;
         } catch (IOException e) {
             throw new FTPControllerException(e.getMessage());
