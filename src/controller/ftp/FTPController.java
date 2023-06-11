@@ -1,6 +1,7 @@
 package controller.ftp;
 
 
+import controller.config.ConfigurationController;
 import controller.exception.FTPControllerException;
 import org.apache.commons.net.ftp.FTPClient;
 
@@ -27,6 +28,7 @@ public final class FTPController {
      * Instancia única de FTPController (patrón Singleton).
      */
     private static FTPController instance;
+    private ConfigurationController configurationController;
     /**
      * Cliente FTP.
      */
@@ -75,7 +77,7 @@ public final class FTPController {
      *
      * @throws FTPControllerException Si ocurre un error al iniciar sesión.
      */
-    public void connect() throws FTPControllerException {
+    private void connect() throws FTPControllerException {
         try {
             ftp.connect(FTP_MOVIL, PORT);
             ftp.enterLocalPassiveMode();
@@ -91,7 +93,7 @@ public final class FTPController {
      *
      * @return true si el cliente está conectado al servidor FTP, false en caso contrario.
      */
-    public boolean isConnected() {
+    private boolean isConnected() {
         return ftp.isConnected();
     }
 
