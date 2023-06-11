@@ -5,25 +5,9 @@ import controller.exception.ConfigurationControllerException;
 import controller.exception.FTPControllerException;
 import org.apache.commons.net.ftp.FTPClient;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
-public final class FTPController {
-
-    //************************************************************
-    //TODO: Remove plain text properties in production.
-    //************************************************************
-    private static final String FTP_WIFI = "192.168.0.28";
-    private static final String FTP_MOVIL = "192.168.235.131";
-
-    public static final int PORT = 21;
-
-    public static final String USER = "clienteftp";
-
-    public static final String PASSWORD = "Abcd1234..";
-
+public class FTPController {
     /**
      * Instancia única de FTPController (patrón Singleton).
      */
@@ -130,7 +114,7 @@ public final class FTPController {
         }
     }
 
-    public File downloadImage(String ftpFolder, String imageName) throws FTPControllerException {
+    public InputStream downloadImage(String ftpFolder, String imageName) throws FTPControllerException {
         try {
             System.out.println(ftpFolder + ": " + imageName);
             System.out.println(ftp.printWorkingDirectory());
@@ -140,11 +124,11 @@ public final class FTPController {
                 }
             }
 
-            File imageFile = new File(imageName);
-            if (!ftp.retrieveFile(imageName, new FileOutputStream(imageFile))) {
+            InputStream fileStream = ftp.retrieveFileStream(imageName);
+            if (fileStream == null) {
                 throw new FTPControllerException("No se pudo descargar la imagen.");
             }
-            return imageFile;
+            return fileStream;
         } catch (IOException e) {
             throw new FTPControllerException(e.getMessage());
         }
