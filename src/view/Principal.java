@@ -8,16 +8,13 @@ import controller.database.DatabaseController;
 import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
 import controller.exception.FTPControllerException;
-import controller.ftp.FTPController;
 import controller.renderer.CustomListRenderers;
+import controller.ftp.FTPController;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -827,7 +824,7 @@ public class Principal extends javax.swing.JFrame {
         return (Runnable) () -> {
             try {
                 final FTPController instance = FTPController.getInstance();
-                File imageFile = instance.downloadImage(entity, imgUrl);
+                instance.downloadImage(entity, imgUrl);
                 BufferedImage imagePreview = ImageIO.read(imageFile);
                 if (entity.equals("clientes")) {
                     lblClienteFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblClienteFoto.getWidth(), lblClienteFoto.getHeight(), Image.SCALE_SMOOTH)));
