@@ -820,11 +820,7 @@ public class Principal extends javax.swing.JFrame {
                     lblEjercicioFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblEjercicioFoto.getWidth(), lblEjercicioFoto.getHeight(), Image.SCALE_SMOOTH)));
                 }
                 
-            } catch (FTPControllerException ex) {
-                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
-            } catch (ConfigurationControllerException ex) {
+            } catch (IOException | ConfigurationControllerException ex) {
                 JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             }
         };
