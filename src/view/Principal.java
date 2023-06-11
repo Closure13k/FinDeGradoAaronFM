@@ -14,7 +14,10 @@ import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -595,16 +598,16 @@ public class Principal extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         runTask(() -> {
-                    dispose();
-                    try {
-                        ConfigurationController.getInstance().storeAppConfiguration();
-                        DatabaseController.getInstance().disconnect();
-                        FTPController.getInstance().disconnect();
-                        System.exit(0);
-                    } catch (EntityControllersException | ConfigurationControllerException | FTPControllerException ex) {
-                        System.exit(1);
-                    }
-                }
+            dispose();
+            try {
+                ConfigurationController.getInstance().storeAppConfiguration();
+                DatabaseController.getInstance().disconnect();
+                FTPController.getInstance().disconnect();
+                System.exit(0);
+            } catch (EntityControllersException | ConfigurationControllerException | FTPControllerException ex) {
+                System.exit(1);
+            }
+        }
         );
 
 
@@ -824,16 +827,19 @@ public class Principal extends javax.swing.JFrame {
         return (Runnable) () -> {
             try {
                 final FTPController instance = FTPController.getInstance();
-                instance.downloadImage(entity, imgUrl);
-                BufferedImage imagePreview = ImageIO.read(imageFile);
-                if (entity.equals("clientes")) {
-                    lblClienteFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblClienteFoto.getWidth(), lblClienteFoto.getHeight(), Image.SCALE_SMOOTH)));
-                } else {
-                    lblEjercicioFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblEjercicioFoto.getWidth(), lblEjercicioFoto.getHeight(), Image.SCALE_SMOOTH)));
-                }
+                try (InputStream downloadStream = instance.downloadImage(entity, imgUrl)) {
+                    BufferedImage imagePreview = ImageIO.read(downloadStream);
 
-            } catch (IOException | ConfigurationControllerException ex) {
-                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                    if (entity.equals("clientes")) {
+                        lblClienteFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblClienteFoto.getWidth(), lblClienteFoto.getHeight(), Image.SCALE_SMOOTH)));
+                    } else {
+                        lblEjercicioFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblEjercicioFoto.getWidth(), lblEjercicioFoto.getHeight(), Image.SCALE_SMOOTH)));
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                }
+            } catch (FTPControllerException | ConfigurationControllerException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }
         };
     }
