@@ -7,6 +7,7 @@ package view;
 import controller.data.ClienteController;
 import controller.data.ClienteEjercicioController;
 import controller.data.EjercicioController;
+import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
 import controller.renderer.CustomListRenderers;
 import java.awt.CardLayout;
@@ -703,9 +704,10 @@ public class Principal extends javax.swing.JFrame {
                 btnTableEjercicios.setEnabled(isClienteTable);
 
                 cardLayout.show(pnlDataDetails, isClienteTable ? "cliente" : "ejercicio");
-            } catch (EntityControllersException ex) {
+            } catch (EntityControllersException | ConfigurationControllerException ex) {
                 tablesButtonsEnabledState(true);
                 JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                ex.printStackTrace();
             }
         };
     }
@@ -736,7 +738,7 @@ public class Principal extends javax.swing.JFrame {
                 lstEjercicioRelacion.setModel(listModelRelacion);
             }
 
-        } catch (EntityControllersException ex) {
+        } catch (EntityControllersException | ConfigurationControllerException ex) {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
         }
     }
