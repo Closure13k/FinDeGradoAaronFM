@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import controller.database.DatabaseController;
+import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
 import model.Cliente;
 import model.entity.ClienteEntity;
@@ -22,6 +23,7 @@ public class ClienteController {
 
     private static ClienteController instance;
 
+    private DatabaseController databaseController;
     private List<Cliente> listadoClientes;
 
     /**
@@ -29,14 +31,15 @@ public class ClienteController {
      *
      * @return el controlador.
      */
-    public static ClienteController getInstance() {
+    public static ClienteController getInstance() throws EntityControllersException, ConfigurationControllerException {
         if (instance == null) {
             instance = new ClienteController();
         }
         return instance;
     }
 
-    private ClienteController() {
+    private ClienteController() throws EntityControllersException, ConfigurationControllerException {
+        databaseController = DatabaseController.getInstance();
     }
 
     /**
@@ -79,7 +82,7 @@ public class ClienteController {
      * @throws EntityControllersException si se produce un error en la consulta.
      */
     private List<Cliente> getAllClientes() throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
             List<Cliente> clientes = new ArrayList<>();
             if (rs.next()) {
@@ -106,7 +109,7 @@ public class ClienteController {
      * @throws EntityControllersException si se produce un error al insertar.
      */
     public Cliente addCliente(Cliente cliente) throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.insertQuery(), Statement.RETURN_GENERATED_KEYS)) {
             //Prepara los campos del statement.
             prepareInsertOrUpdate(ps, cliente);
@@ -130,7 +133,7 @@ public class ClienteController {
      * @throws EntityControllersException si se produce un error al actualizar.
      */
     public Cliente updateCliente(Cliente cliente) throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.updateQuery())) {
             //Campos a actualizar. Del primero al quinto.
             prepareInsertOrUpdate(ps, cliente);
@@ -151,7 +154,7 @@ public class ClienteController {
      * @throws EntityControllersException si se produce un error al borrar.
      */
     public Cliente deleteCliente(Cliente cliente) throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.deleteQuery())) {
             ps.setInt(1, cliente.getIdCliente());
             ps.executeUpdate();
