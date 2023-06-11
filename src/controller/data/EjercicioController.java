@@ -5,6 +5,7 @@
 package controller.data;
 
 import controller.database.DatabaseController;
+import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
 import model.Ejercicio;
 
@@ -24,6 +25,7 @@ public class EjercicioController {
 
     private static EjercicioController instance;
 
+    private DatabaseController databaseController;
     private List<Ejercicio> listadoEjercicios;
 
     /**
@@ -31,14 +33,15 @@ public class EjercicioController {
      *
      * @return el controlador.
      */
-    public static EjercicioController getInstance() {
+    public static EjercicioController getInstance() throws EntityControllersException, ConfigurationControllerException {
         if (instance == null) {
             instance = new EjercicioController();
         }
         return instance;
     }
 
-    private EjercicioController() {
+    private EjercicioController() throws EntityControllersException, ConfigurationControllerException {
+        databaseController = DatabaseController.getInstance();
     }
 
     /**
@@ -78,7 +81,7 @@ public class EjercicioController {
      * @throws EntityControllersException si se produce un error en la consulta.
      */
     private List<Ejercicio> getAllEjercicios() throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
             List<Ejercicio> ejercicios = new ArrayList<>();
             if (rs.next()) {
@@ -103,7 +106,7 @@ public class EjercicioController {
      * @throws EntityControllersException si se produce un error al insertar.
      */
     public Ejercicio addEjercicio(Ejercicio ejercicio) throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.insertQuery(), Statement.RETURN_GENERATED_KEYS)) {
             //Prepara los campos del statement.
             prepareInsertOrUpdate(ps, ejercicio);
@@ -127,7 +130,7 @@ public class EjercicioController {
      * @throws EntityControllersException si se produce un error al actualizar.
      */
     public Ejercicio updateEjercicio(Ejercicio ejercicio) throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.updateQuery())) {
             //Prepara los campos del statement.
             prepareInsertOrUpdate(ps, ejercicio);
@@ -148,7 +151,7 @@ public class EjercicioController {
      * @throws EntityControllersException si se produce un error al borrar.
      */
     public Ejercicio deleteEjercicio(Ejercicio ejercicio) throws EntityControllersException {
-        Connection dbCon = DatabaseController.getInstance().getConnection();
+        Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.deleteQuery())) {
             ps.setInt(1, ejercicio.getIdEjercicio());
             ps.executeUpdate();
