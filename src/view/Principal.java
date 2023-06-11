@@ -1,12 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package view;
 
+import controller.config.ConfigurationController;
 import controller.data.ClienteController;
 import controller.data.ClienteEjercicioController;
 import controller.data.EjercicioController;
+import controller.database.DatabaseController;
 import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
 import controller.exception.FTPControllerException;
@@ -17,7 +15,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,12 +27,8 @@ import model.Cliente;
 import model.ClienteEjercicio;
 import model.Ejercicio;
 
-/**
- *
- * @author AaronFM
- */
 public class Principal extends javax.swing.JFrame {
-    
+
     public Principal() {
         initComponents();
         cardLayout = (CardLayout) pnlDataDetails.getLayout();
@@ -44,9 +37,9 @@ public class Principal extends javax.swing.JFrame {
         lstData.setCellRenderer(CustomListRenderers.INSTANCE);
         lstClienteRelacion.setCellRenderer(CustomListRenderers.INSTANCE);
         lstEjercicioRelacion.setCellRenderer(CustomListRenderers.INSTANCE);
-        
+
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -109,6 +102,11 @@ public class Principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(920, 460));
         setPreferredSize(new java.awt.Dimension(920, 460));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         pnlTableButtons.setLayout(new javax.swing.BoxLayout(pnlTableButtons, javax.swing.BoxLayout.LINE_AXIS));
         pnlTableButtons.add(pnlTablesFillLeft);
@@ -597,7 +595,24 @@ public class Principal extends javax.swing.JFrame {
     private void pnlEjercicioDetailsComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_pnlEjercicioDetailsComponentHidden
         clearEjercicioFields();
     }//GEN-LAST:event_pnlEjercicioDetailsComponentHidden
-    
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        runTask(() -> {
+                    dispose();
+                    try {
+                        ConfigurationController.getInstance().storeAppConfiguration();
+                        DatabaseController.getInstance().disconnect();
+                        FTPController.getInstance().disconnect();
+                        System.exit(0);
+                    } catch (EntityControllersException | ConfigurationControllerException | FTPControllerException ex) {
+                        System.exit(1);
+                    }
+                }
+        );
+
+
+    }//GEN-LAST:event_formWindowClosing
+
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -625,7 +640,7 @@ public class Principal extends javax.swing.JFrame {
             new Principal().setVisible(true);
         });
     }
-    
+
     DefaultListModel<Object> listModelRelacion;
     DefaultListModel<Object> listModel;
     CardLayout cardLayout;
@@ -691,7 +706,7 @@ public class Principal extends javax.swing.JFrame {
     public void runTask(Runnable task) {
         new Thread(task).start();
     }
-    
+
     public Runnable loadJListTask(String cardTarget) {
         boolean isClienteTable = cardTarget.equals("cliente");
         return (Runnable) () -> {
@@ -704,10 +719,10 @@ public class Principal extends javax.swing.JFrame {
                                 : EjercicioController.getInstance().getListadoEjercicios()
                 );
                 lstData.setModel(listModel);
-                
+
                 btnTableClientes.setEnabled(!isClienteTable);
                 btnTableEjercicios.setEnabled(isClienteTable);
-                
+
                 cardLayout.show(pnlDataDetails, isClienteTable ? "cliente" : "ejercicio");
             } catch (EntityControllersException | ConfigurationControllerException ex) {
                 tablesButtonsEnabledState(true);
@@ -728,21 +743,21 @@ public class Principal extends javax.swing.JFrame {
             if (selectedValue instanceof Cliente c) {
                 updateClienteDetails(c);
                 ejercicios = controller.getEjerciciosByClienteId(c.getIdCliente());
-                
+
                 listModelRelacion.removeAllElements();
                 listModelRelacion.addAll(ejercicios);
                 lstClienteRelacion.setModel(listModelRelacion);
             }
-            
+
             if (selectedValue instanceof Ejercicio e) {
                 updateEjercicioDetails(e);
                 ejercicios = controller.getClientesByEjercicioId(e.getIdEjercicio());
-                
+
                 listModelRelacion.removeAllElements();
                 listModelRelacion.addAll(ejercicios);
                 lstEjercicioRelacion.setModel(listModelRelacion);
             }
-            
+
         } catch (EntityControllersException | ConfigurationControllerException ex) {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
         }
@@ -776,9 +791,9 @@ public class Principal extends javax.swing.JFrame {
         } else {
             runTask(downloadIconTask("clientes", imageUrl));
         }
-        
+
     }
-    
+
     private void updateEjercicioDetails(Ejercicio e) {
         txtEjercicioId.setText(e.getIdEjercicio() + "");
         txtEjercicioTipo.setText(e.getTipo());
@@ -796,18 +811,18 @@ public class Principal extends javax.swing.JFrame {
     private void resetImageIcon(String label) {
         String imageResourceName;
         JLabel targetLabel;
-        if(label.equals("ejercicios")){
+        if (label.equals("ejercicios")) {
             imageResourceName = "exercise.png";
             targetLabel = lblEjercicioFoto;
         } else {
             imageResourceName = "profile.png";
             targetLabel = lblClienteFoto;
         }
-        ImageIcon image = new ImageIcon(this.getClass().getResource("/resources/images/"+imageResourceName));
+        ImageIcon image = new ImageIcon(this.getClass().getResource("/resources/images/" + imageResourceName));
         Image scaledInstance = image.getImage().getScaledInstance(targetLabel.getWidth(), targetLabel.getHeight(), Image.SCALE_SMOOTH);
         targetLabel.setIcon(new ImageIcon(scaledInstance));
     }
-    
+
     private Runnable downloadIconTask(String entity, String imgUrl) {
         return (Runnable) () -> {
             try {
@@ -819,13 +834,13 @@ public class Principal extends javax.swing.JFrame {
                 } else {
                     lblEjercicioFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblEjercicioFoto.getWidth(), lblEjercicioFoto.getHeight(), Image.SCALE_SMOOTH)));
                 }
-                
+
             } catch (IOException | ConfigurationControllerException ex) {
                 JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             }
         };
     }
-    
+
     private void clearEjercicioFields() {
         txtEjercicioId.setText("");
         txtEjercicioTipo.setText("");
@@ -835,7 +850,7 @@ public class Principal extends javax.swing.JFrame {
         listModelRelacion.removeAllElements();
         lstClienteRelacion.setModel(listModelRelacion);
     }
-    
+
     private void clearClienteFields() {
         txtClienteId.setText("");
         txtClienteNickname.setText("");
@@ -845,5 +860,5 @@ public class Principal extends javax.swing.JFrame {
         listModelRelacion.removeAllElements();
         lstClienteRelacion.setModel(listModelRelacion);
     }
-    
+
 }
