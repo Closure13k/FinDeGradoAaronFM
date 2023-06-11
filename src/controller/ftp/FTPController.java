@@ -1,7 +1,7 @@
 package controller.ftp;
 
-
 import controller.config.ConfigurationController;
+import controller.exception.ConfigurationControllerException;
 import controller.exception.FTPControllerException;
 import org.apache.commons.net.ftp.FTPClient;
 
@@ -39,7 +39,7 @@ public final class FTPController {
      *
      * @return La instancia única de FTPController.
      */
-    public static FTPController getInstance() throws FTPControllerException {
+    public static FTPController getInstance() throws FTPControllerException, ConfigurationControllerException {
         if (instance == null) {
             instance = new FTPController();
         }
@@ -51,9 +51,9 @@ public final class FTPController {
      *
      * @throws FTPControllerException Si ocurre un error al iniciar sesión.
      */
-    private FTPController() throws FTPControllerException {
-        ftp = new FTPClient();
+    private FTPController() throws FTPControllerException, ConfigurationControllerException {
         try {
+            ftp = new FTPClient();
             connect();
         } catch (FTPControllerException e) {
             throw new FTPControllerException("Error al instanciar FTPController: " + e.getMessage());
@@ -61,28 +61,27 @@ public final class FTPController {
     }
 
     /**
-     * Comprueba que sigue conectado al servidor FTP.
-     * Si no lo está, refresca la conexión.
+     * Comprueba que sigue conectado al servidor FTP. Si no lo está, refresca la
+     * conexión.
      */
-    public FTPController refreshConnection() throws FTPControllerException {
+    public FTPController refreshConnection() throws FTPControllerException, ConfigurationControllerException {
         if (!isConnected()) {
             connect();
         }
         return this;
     }
 
-
     /**
      * Inicia sesión en el servidor FTP.
      *
      * @throws FTPControllerException Si ocurre un error al iniciar sesión.
      */
-    private void connect() throws FTPControllerException {
+    private void connect() throws FTPControllerException, ConfigurationControllerException {
         try {
-            ftp.connect(FTP_MOVIL, PORT);
+            ftp.connect(configurationController.getFtpIP(), configurationController.getFtpPort());
             ftp.enterLocalPassiveMode();
             ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
-            ftp.login(USER, PASSWORD);
+            ftp.login(configurationController.getFtpUser(), configurationController.getFtpPassword());
         } catch (IOException e) {
             throw new FTPControllerException(e.getMessage());
         }
@@ -91,7 +90,8 @@ public final class FTPController {
     /**
      * Compueba si el cliente está conectado al servidor FTP.
      *
-     * @return true si el cliente está conectado al servidor FTP, false en caso contrario.
+     * @return true si el cliente está conectado al servidor FTP, false en caso
+     * contrario.
      */
     private boolean isConnected() {
         return ftp.isConnected();
@@ -116,7 +116,7 @@ public final class FTPController {
             throw new FTPControllerException("La imagen no existe.");
         }
         try (var inputStream = new FileInputStream(imageFile)) {
-            if(!ftp.changeWorkingDirectory(ftpFolder)){
+            if (!ftp.changeWorkingDirectory(ftpFolder)) {
                 ftp.mkd(ftpFolder);
                 ftp.changeWorkingDirectory(ftpFolder);
             }
@@ -131,7 +131,7 @@ public final class FTPController {
 
     public File downloadImage(String ftpFolder, String imageName) throws FTPControllerException {
         try {
-            if(!ftp.changeWorkingDirectory(ftpFolder)){
+            if (!ftp.changeWorkingDirectory(ftpFolder)) {
                 throw new FTPControllerException("No se pudo acceder a la carpeta.");
             }
             File imageFile = new File(imageName);
@@ -143,6 +143,5 @@ public final class FTPController {
             throw new FTPControllerException(e.getMessage());
         }
     }
-
 
 }
