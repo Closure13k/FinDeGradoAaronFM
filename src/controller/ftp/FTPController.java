@@ -38,7 +38,6 @@ public class FTPController {
      */
     private FTPController() throws FTPControllerException, ConfigurationControllerException {
         try {
-            configurationController = ConfigurationController.getInstance();
             ftp = new FTPClient();
             connect();
         } catch (FTPControllerException e) {
@@ -117,6 +116,7 @@ public class FTPController {
 
     public InputStream downloadImage(String ftpFolder, String imageName) throws FTPControllerException {
         try {
+<<<<<<< HEAD
 
             if (!ftp.changeWorkingDirectory(ftpFolder)) {
                 //throw new FTPControllerException("No se pudo acceder a la carpeta.");
@@ -124,6 +124,16 @@ public class FTPController {
 
             InputStream fileStream = ftp.retrieveFileStream(imageName);
             return fileStream;
+=======
+            if (!ftp.changeWorkingDirectory(ftpFolder)) {
+                throw new FTPControllerException("No se pudo acceder a la carpeta.");
+            }
+            File imageFile = new File(imageName);
+            if (!ftp.retrieveFile(imageName, new FileOutputStream(imageFile))) {
+                throw new FTPControllerException("No se pudo descargar la imagen.");
+            }
+            return imageFile;
+>>>>>>> parent of 9d37fe5 (Update FTPController.java)
         } catch (IOException e) {
             throw new FTPControllerException(e.getMessage());
         }
