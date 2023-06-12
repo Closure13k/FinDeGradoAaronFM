@@ -6,13 +6,15 @@ import controller.exception.EntityControllersException;
 import controller.exception.FTPControllerException;
 import controller.ftp.FTPController;
 import controller.ftp.ImagePickerController;
-import controller.validation.NotNullText;
+import controller.validation.RestrictedLengthVerifier;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
@@ -72,9 +74,14 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
         txtEjercicioPromedio = new javax.swing.JTextField();
         pnlEjercicioFoto = new javax.swing.JPanel();
         lblEjercicioFoto = new javax.swing.JLabel();
+        pnlButtons = new javax.swing.JPanel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnCancel = new javax.swing.JButton();
-        btnSave = new javax.swing.JButton();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnFoto = new javax.swing.JButton();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        btnSave = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -92,7 +99,6 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlEjercicioDetails.add(lblEjercicioTipo, gridBagConstraints);
 
-        txtEjercicioTipo.setBackground(new java.awt.Color(255, 255, 255));
         txtEjercicioTipo.setText("Tipo");
         txtEjercicioTipo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -136,7 +142,6 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlEjercicioDetails.add(lblEjercicioInstrucciones, gridBagConstraints);
 
-        txtEjercicioInstrucciones.setBackground(new java.awt.Color(255, 255, 255));
         txtEjercicioInstrucciones.setText("Instrucciones");
         txtEjercicioInstrucciones.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -205,56 +210,55 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlEjercicioDetails.add(pnlEjercicioFoto, gridBagConstraints);
 
+        getContentPane().add(pnlEjercicioDetails, java.awt.BorderLayout.CENTER);
+
+        pnlButtons.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
+        pnlButtons.add(filler1);
+
         btnCancel.setText("Cancelar");
-        btnCancel.setMaximumSize(new java.awt.Dimension(100, 25));
-        btnCancel.setMinimumSize(new java.awt.Dimension(100, 25));
-        btnCancel.setPreferredSize(new java.awt.Dimension(100, 25));
+        btnCancel.setMaximumSize(new java.awt.Dimension(110, 25));
+        btnCancel.setMinimumSize(new java.awt.Dimension(110, 25));
+        btnCancel.setPreferredSize(new java.awt.Dimension(110, 25));
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
-        pnlEjercicioDetails.add(btnCancel, gridBagConstraints);
-
-        btnSave.setText("Guardar");
-        btnSave.setMaximumSize(new java.awt.Dimension(100, 25));
-        btnSave.setMinimumSize(new java.awt.Dimension(100, 25));
-        btnSave.setPreferredSize(new java.awt.Dimension(100, 25));
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
-        pnlEjercicioDetails.add(btnSave, gridBagConstraints);
+        pnlButtons.add(btnCancel);
+        pnlButtons.add(filler4);
 
         btnFoto.setText("Cambiar Foto");
+        btnFoto.setMaximumSize(new java.awt.Dimension(110, 25));
+        btnFoto.setMinimumSize(new java.awt.Dimension(110, 25));
+        btnFoto.setPreferredSize(new java.awt.Dimension(110, 25));
         btnFoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFotoActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
-        pnlEjercicioDetails.add(btnFoto, gridBagConstraints);
+        pnlButtons.add(btnFoto);
+        pnlButtons.add(filler3);
 
-        getContentPane().add(pnlEjercicioDetails, java.awt.BorderLayout.CENTER);
+        btnSave.setText("Guardar");
+        btnSave.setMaximumSize(new java.awt.Dimension(110, 25));
+        btnSave.setMinimumSize(new java.awt.Dimension(110, 25));
+        btnSave.setPreferredSize(new java.awt.Dimension(110, 25));
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+        pnlButtons.add(btnSave);
+        pnlButtons.add(filler2);
+
+        getContentPane().add(pnlButtons, java.awt.BorderLayout.PAGE_END);
 
         setSize(new java.awt.Dimension(700, 300));
         setLocationRelativeTo(null);
@@ -277,12 +281,17 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnFoto;
     private javax.swing.JButton btnSave;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
     private javax.swing.JLabel lblEjercicioFoto;
     private javax.swing.JLabel lblEjercicioId;
     private javax.swing.JLabel lblEjercicioInstrucciones;
     private javax.swing.JLabel lblEjercicioPromedio;
     private javax.swing.JLabel lblEjercicioRecord;
     private javax.swing.JLabel lblEjercicioTipo;
+    private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlEjercicioDetails;
     private javax.swing.JPanel pnlEjercicioFoto;
     private javax.swing.JTextField txtEjercicioId;
@@ -347,6 +356,12 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
                     File chosenFile = chooser.getSelectedFile();
+                    try {
+                        displayImageIcon(chosenFile);
+                    } catch (NullPointerException npe) {
+                        JOptionPane.showMessageDialog(rootPane, "Error leyendo la imagen.");
+                        return;
+                    }
                     FTPController ftp = FTPController.getInstance();
                     String uploadedImageName = ftp.uploadImage("ejercicios", chosenFile, chosenFile.getName());
                     ejercicio.setFotoEjercicio(uploadedImageName);
@@ -371,20 +386,37 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
         txtEjercicioInstrucciones.setText(ejercicio.getInstrucciones() == null ? "" : ejercicio.getInstrucciones());
         txtEjercicioRecord.setText(ejercicio.getRecord() + "");
         txtEjercicioPromedio.setText(ejercicio.getPromedio() + "");
-        lblEjercicioFoto.setIcon(principal.sendIcon(ejercicio));
+        if (ejercicio.getFotoEjercicio() != null) {
+            lblEjercicioFoto.setIcon(principal.sendIcon(ejercicio));
+        } else {
+            ImageIcon image = new ImageIcon(this.getClass().getResource("/resources/images/exercise.png"));
+            Image scaledInstance = image.getImage().getScaledInstance(128, 128, Image.SCALE_SMOOTH);
+            lblEjercicioFoto.setIcon(new ImageIcon(scaledInstance));
+        }
     }
 
     /**
      * Validación de datos. En el caso de esta entidad, éste es más que
      * suficiente.
      * <br>
-     * Extraido a clase para reutilizar en Cliente.
+     * Extraido a clase para reutilizar.
      */
     private void addInputVerifiers() {
-        txtEjercicioTipo.setInputVerifier(new NotNullText(lblEjercicioTipo.getText(), btnSave));
+        txtEjercicioTipo.setInputVerifier(new RestrictedLengthVerifier(
+                false,
+                30,
+                lblEjercicioTipo.getText(),
+                btnSave
+        ));
+        txtEjercicioInstrucciones.setInputVerifier(new RestrictedLengthVerifier(
+                true,
+                250,
+                lblEjercicioInstrucciones.getText(),
+                btnSave
+        ));
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Document Listeners para manejar los cambios en el texto. Mucho código.">
+    //<editor-fold defaultstate="collapsed" desc="Document Listeners para los setters. Mucho código.">
     private void addDocumentListeners() {
         txtEjercicioTipo.getDocument()
                 .addDocumentListener(
@@ -444,8 +476,16 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
     //</editor-fold>
 
     private void actionButtonsEnabledState(boolean b) {
-        btnCancel.setEnabled(b);
+        btnFoto.setEnabled(b);
         btnSave.setEnabled(b);
     }
 
+    private void displayImageIcon(File chosenFile) {
+        try {
+            BufferedImage image = ImageIO.read(chosenFile);
+            lblEjercicioFoto.setIcon(new ImageIcon(image.getScaledInstance(128, 128, Image.SCALE_SMOOTH)));
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Error leyendo la imagen.");
+        }
+    }
 }
