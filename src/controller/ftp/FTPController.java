@@ -102,7 +102,7 @@ public class FTPController {
             throw new FTPControllerException("La imagen no existe.");
         }
         try (var inputStream = new FileInputStream(imageFile)) {
-            if (!ftp.changeWorkingDirectory(ftpFolder)) {
+            if (!ftp.changeWorkingDirectory("/"+ftpFolder)) {
                 ftp.mkd(ftpFolder);
                 ftp.changeWorkingDirectory(ftpFolder);
             }
@@ -118,7 +118,7 @@ public class FTPController {
     public File downloadImage(String ftpFolder, String imageName) throws FTPControllerException {
         try {
             if (!ftp.printWorkingDirectory().contains(ftpFolder)) {
-                if (!ftp.changeWorkingDirectory(ftpFolder)) {
+                if (!ftp.changeWorkingDirectory("/"+ftpFolder)) {
                     throw new FTPControllerException("No se pudo acceder a la carpeta.");
                 }
             }
@@ -128,7 +128,6 @@ public class FTPController {
                 throw new FTPControllerException("No se pudo descargar la imagen.");
             }
             return imageFile;
-
         } catch (IOException e) {
             throw new FTPControllerException(e.getMessage());
         }
