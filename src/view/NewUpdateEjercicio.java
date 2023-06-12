@@ -45,7 +45,7 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
             instance.addDocumentListeners();
         }
         instance.principal = parent;
-        instance.ejercicio = ejercicio;
+        instance.ejercicio = ejercicio.getIdEjercicio() == 0 ? ejercicio : Ejercicio.forUpdate(ejercicio);
         instance.prepareFields();
 
         return instance;
