@@ -586,15 +586,18 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_lstDataValueChanged
 
     private void btnEditClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditClienteActionPerformed
-        prepareForUpdate(lstData.getSelectedValue());
+        openUpdateDialog(lstData.getSelectedValue());
     }//GEN-LAST:event_btnEditClienteActionPerformed
 
     private void btnRemoveClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveClienteActionPerformed
-
+        Object selectedValue = lstData.getSelectedValue();
+        if (selectedValue != null) {
+            deleteEntity(selectedValue);
+        }
     }//GEN-LAST:event_btnRemoveClienteActionPerformed
 
     private void btnEditEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditEjercicioActionPerformed
-        prepareForUpdate(lstData.getSelectedValue());
+        openUpdateDialog(lstData.getSelectedValue());
     }//GEN-LAST:event_btnEditEjercicioActionPerformed
 
     private void btnRemoveEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveEjercicioActionPerformed
@@ -626,8 +629,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         openInsertDialog();
-
-
     }//GEN-LAST:event_btnNewActionPerformed
 
     public static void main(String args[]) {
@@ -723,10 +724,22 @@ public class Principal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 //</editor-fold>
 
+    /**
+     * Ejecuta una acción en un hilo separado.
+     *
+     * @param task la acción pesada a ejecutar.
+     */
     public void runTask(Runnable task) {
         new Thread(task).start();
     }
 
+    /**
+     * Carga la lista en base a lo recibido de la base de datos.
+     *
+     * @param cardTarget La entidad que recibirá.
+     * @return la tarea a lanzar por
+     * @see #runTask(java.lang.Runnable)
+     */
     public Runnable loadJListTask(String cardTarget) {
         boolean isClienteTable = cardTarget.equals("cliente");
         return (Runnable) () -> {
@@ -756,11 +769,39 @@ public class Principal extends javax.swing.JFrame {
      */
     private void openInsertDialog() {
         if (pnlClienteDetails.isShowing()) {
-
+            NewUpdateCliente.getInstance(this, new Cliente()).setVisible(true);
         }
         if (pnlEjercicioDetails.isShowing()) {
             NewUpdateEjercicio.getInstance(this, new Ejercicio()).setVisible(true);
         }
+    }
+
+    /**
+     * Lanza la ventana de actualización.
+     * <br>
+     * Inserción y actualización son el mismo Dialog, pero diferencian sus
+     * acciones según lo recibido.
+     *
+     * @param selectedValue
+     */
+    private void openUpdateDialog(Object selectedValue) {
+        if (selectedValue == null) {
+            return;
+        }
+        if (selectedValue instanceof Ejercicio e) {
+            NewUpdateEjercicio.getInstance(this, e).setVisible(true);
+        }
+        if (selectedValue instanceof Cliente c) {
+            NewUpdateCliente.getInstance(this, c).setVisible(true);
+        }
+    }
+
+    /**
+     * Prepara la entidad seleccionada en los detalles para su borrado.
+     *
+     * @param selectedValue
+     */
+    private void deleteEntity(Object selectedValue) {
 
     }
 
@@ -797,17 +838,9 @@ public class Principal extends javax.swing.JFrame {
     }
 
     /**
-     * Alterna el estado de los botones mientras se procesa una tarea.
-     *
-     * @param enabled si se activan o no.
-     */
-    private void tablesButtonsEnabledState(boolean enabled) {
-        btnTableClientes.setEnabled(enabled);
-        btnTableEjercicios.setEnabled(enabled);
-    }
-
-    /**
-     * Carga los campos de un cliente. La lista de relación se carga en
+     * Carga los campos de un cliente.
+     * <br>
+     * La lista de relación se carga en
      *
      * @see #refreshDetailsPanel(java.lang.Object)
      * @param c
@@ -827,6 +860,14 @@ public class Principal extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Carga los campos de un ejercicio.
+     * <br>
+     * La lista de relación se carga en
+     *
+     * @see #refreshDetailsPanel(java.lang.Object)
+     * @param e
+     */
     private void updateEjercicioDetails(Ejercicio e) {
         txtEjercicioId.setText(e.getIdEjercicio() + "");
         txtEjercicioTipo.setText(e.getTipo());
@@ -841,6 +882,11 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Pone el icono por defecto.
+     *
+     * @param label
+     */
     private void resetImageIcon(String label) {
         String imageResourceName;
         JLabel targetLabel;
@@ -856,34 +902,39 @@ public class Principal extends javax.swing.JFrame {
         targetLabel.setIcon(new ImageIcon(scaledInstance));
     }
 
+    /**
+     * Descarga la imagen según la entidad (cliente, ejercicio).
+     *
+     * @param entity
+     * @param imgUrl
+     * @return
+     */
     private Runnable downloadIconTask(String entity, String imgUrl) {
         return (Runnable) () -> {
+            final boolean isClientesEntity = entity.equals("clientes");
             try {
                 final FTPController instance = FTPController.getInstance();
                 File imageFile = instance.downloadImage(entity, imgUrl);
-                BufferedImage imagePreview;
-                imagePreview = ImageIO.read(imageFile);
-                if (entity.equals("clientes")) {
-                    lblClienteFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblClienteFoto.getWidth(), lblClienteFoto.getHeight(), Image.SCALE_SMOOTH)));
-                } else {
-                    lblEjercicioFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblEjercicioFoto.getWidth(), lblEjercicioFoto.getHeight(), Image.SCALE_SMOOTH)));
-                }
 
+                Image imagePreview = ImageIO.read(imageFile);
+                if (isClientesEntity) {
+                    lblClienteFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(128, 128, Image.SCALE_SMOOTH)));
+                } else {
+                    lblEjercicioFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(128, 128, Image.SCALE_SMOOTH)));
+                }
             } catch (IOException | ConfigurationControllerException ex) {
+                resetImageIcon(isClientesEntity ? "clientes" : "ejercicios");
                 JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+            } catch (NullPointerException npe) {
+                resetImageIcon(isClientesEntity ? "clientes" : "ejercicios");
+                JOptionPane.showMessageDialog(rootPane, "Error leyendo la imagen descargada.");
             }
         };
     }
 
-    private void prepareForUpdate(Object selectedValue) {
-        if (selectedValue == null) {
-            return;
-        }
-        if (selectedValue instanceof Ejercicio e) {
-            NewUpdateEjercicio.getInstance(this, e).setVisible(true);
-        }
-    }
-
+    /**
+     * Vacía los campos del panel Ejercicio.
+     */
     private void clearEjercicioFields() {
         txtEjercicioId.setText("");
         txtEjercicioTipo.setText("");
@@ -894,6 +945,9 @@ public class Principal extends javax.swing.JFrame {
         lstClienteRelacion.setModel(listModelRelacion);
     }
 
+    /**
+     * Vacía los campos del pane Cliente.
+     */
     private void clearClienteFields() {
         txtClienteId.setText("");
         txtClienteNickname.setText("");
@@ -904,12 +958,27 @@ public class Principal extends javax.swing.JFrame {
         lstClienteRelacion.setModel(listModelRelacion);
     }
 
+    /**
+     * Alterna el estado de los botones mientras se procesa una tarea.
+     *
+     * @param enabled si se activan o no.
+     */
+    private void tablesButtonsEnabledState(boolean enabled) {
+        btnTableClientes.setEnabled(enabled);
+        btnTableEjercicios.setEnabled(enabled);
+    }
+
+    /**
+     * Manda la foto a una pantalla hija que la necesite.
+     *
+     * @param o
+     * @return
+     */
     public Icon sendIcon(Object o) {
-        if (o instanceof Cliente c) {
+        if (o instanceof Cliente) {
             return lblClienteFoto.getIcon();
         } else {
             return lblEjercicioFoto.getIcon();
         }
     }
-
 }
