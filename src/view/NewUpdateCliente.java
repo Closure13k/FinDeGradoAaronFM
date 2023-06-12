@@ -54,7 +54,7 @@ public class NewUpdateCliente extends javax.swing.JDialog {
 
         }
         instance.principal = parent;
-        instance.cliente = cliente;
+        instance.cliente = cliente.getIdCliente() == 0 ? cliente : Cliente.forUpdate(cliente);
         instance.prepareFields();
 
         return instance;
@@ -427,7 +427,7 @@ public class NewUpdateCliente extends javax.swing.JDialog {
             }
 
             private void applyChange() {
-                String text = txtClienteNickname.getText();
+                String text = txtClienteNickname.getText().trim();
                 cliente.setNickname(text);
             }
         });
@@ -448,8 +448,58 @@ public class NewUpdateCliente extends javax.swing.JDialog {
             }
 
             private void applyChange() {
-                String text = txtClienteNombre.getText();
+                String text = txtClienteNombre.getText().trim();
                 cliente.setNombreApellidos(text);
+            }
+        });
+        txtClienteAltura.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                applyChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                applyChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //Ignoramos.
+            }
+
+            private void applyChange() {
+                try {
+                    float altura = Float.parseFloat(txtClienteAltura.getText().trim());
+                    cliente.setAltura(altura);
+                } catch (NumberFormatException nfex) {
+                    //Ignoramos. Gestionado en la validación.
+                }
+            }
+        });
+        txtClientePeso.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                applyChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                applyChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //Ignoramos.
+            }
+
+            private void applyChange() {
+                try {
+                    float altura = Float.parseFloat(txtClienteAltura.getText().trim());
+                    cliente.setAltura(altura);
+                } catch (NumberFormatException nfex) {
+                    //Ignoramos. Gestionado en la validación.
+                }
             }
         });
 
