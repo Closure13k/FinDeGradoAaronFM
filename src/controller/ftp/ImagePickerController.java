@@ -10,7 +10,7 @@ public class ImagePickerController {
     public static JFileChooser pickImage() {
         JFileChooser jfc = new JFileChooser();
         jfc.setCurrentDirectory(new File(System.getProperty("user.home")));
-        jfc.addChoosableFileFilter(
+        jfc.setFileFilter(
                 new FileNameExtensionFilter("Archivos de imagen.", "jpg", "png")
         );
         return jfc;
