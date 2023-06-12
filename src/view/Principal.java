@@ -13,13 +13,12 @@ import controller.ftp.FTPController;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,7 +36,6 @@ public class Principal extends javax.swing.JFrame {
         lstData.setCellRenderer(CustomListRenderers.INSTANCE);
         lstClienteRelacion.setCellRenderer(CustomListRenderers.INSTANCE);
         lstEjercicioRelacion.setCellRenderer(CustomListRenderers.INSTANCE);
-
     }
 
     @SuppressWarnings("unchecked")
@@ -55,6 +53,9 @@ public class Principal extends javax.swing.JFrame {
         pnlDataList = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstData = new javax.swing.JList<>();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
+        btnNew = new javax.swing.JButton();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         pnlDataDetails = new javax.swing.JPanel();
         pnlSearchLogo = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
@@ -140,7 +141,7 @@ public class Principal extends javax.swing.JFrame {
         pnlData.setDividerLocation(120);
 
         pnlDataList.setMinimumSize(new java.awt.Dimension(100, 100));
-        pnlDataList.setLayout(new javax.swing.BoxLayout(pnlDataList, javax.swing.BoxLayout.LINE_AXIS));
+        pnlDataList.setLayout(new javax.swing.BoxLayout(pnlDataList, javax.swing.BoxLayout.PAGE_AXIS));
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(100, 100));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(50, 50));
@@ -156,6 +157,18 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(lstData);
 
         pnlDataList.add(jScrollPane1);
+        pnlDataList.add(filler4);
+
+        btnNew.setText("Nuevo");
+        btnNew.setAlignmentX(0.5F);
+        btnNew.setAlignmentY(0.0F);
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
+        pnlDataList.add(btnNew);
+        pnlDataList.add(filler5);
 
         pnlData.setLeftComponent(pnlDataList);
 
@@ -573,7 +586,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_lstDataValueChanged
 
     private void btnEditClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditClienteActionPerformed
-
+        prepareForUpdate(lstData.getSelectedValue());
     }//GEN-LAST:event_btnEditClienteActionPerformed
 
     private void btnRemoveClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveClienteActionPerformed
@@ -581,7 +594,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoveClienteActionPerformed
 
     private void btnEditEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditEjercicioActionPerformed
-        // TODO add your handling code here:
+        prepareForUpdate(lstData.getSelectedValue());
     }//GEN-LAST:event_btnEditEjercicioActionPerformed
 
     private void btnRemoveEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveEjercicioActionPerformed
@@ -609,9 +622,13 @@ public class Principal extends javax.swing.JFrame {
             }
         }
         );
-
-
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        openInsertDialog();
+
+
+    }//GEN-LAST:event_btnNewActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -649,6 +666,7 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditCliente;
     private javax.swing.JButton btnEditEjercicio;
+    private javax.swing.JButton btnNew;
     private javax.swing.JButton btnRemoveCliente;
     private javax.swing.JButton btnRemoveEjercicio;
     private javax.swing.JButton btnTableClientes;
@@ -656,6 +674,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
@@ -729,6 +749,19 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             }
         };
+    }
+
+    /**
+     * Lanza la ventana de inserción en base al tipo de listado que se cargó.
+     */
+    private void openInsertDialog() {
+        if (pnlClienteDetails.isShowing()) {
+
+        }
+        if (pnlEjercicioDetails.isShowing()) {
+            NewUpdateEjercicio.getInstance(this, new Ejercicio()).setVisible(true);
+        }
+
     }
 
     /**
@@ -819,7 +852,7 @@ public class Principal extends javax.swing.JFrame {
             targetLabel = lblClienteFoto;
         }
         ImageIcon image = new ImageIcon(this.getClass().getResource("/resources/images/" + imageResourceName));
-        Image scaledInstance = image.getImage().getScaledInstance(targetLabel.getWidth(), targetLabel.getHeight(), Image.SCALE_SMOOTH);
+        Image scaledInstance = image.getImage().getScaledInstance(128, 128, Image.SCALE_SMOOTH);
         targetLabel.setIcon(new ImageIcon(scaledInstance));
     }
 
@@ -827,21 +860,28 @@ public class Principal extends javax.swing.JFrame {
         return (Runnable) () -> {
             try {
                 final FTPController instance = FTPController.getInstance();
-                try (InputStream downloadStream = instance.downloadImage(entity, imgUrl)) {
-                    BufferedImage imagePreview = ImageIO.read(downloadStream);
-
-                    if (entity.equals("clientes")) {
-                        lblClienteFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblClienteFoto.getWidth(), lblClienteFoto.getHeight(), Image.SCALE_SMOOTH)));
-                    } else {
-                        lblEjercicioFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblEjercicioFoto.getWidth(), lblEjercicioFoto.getHeight(), Image.SCALE_SMOOTH)));
-                    }
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                File imageFile = instance.downloadImage(entity, imgUrl);
+                BufferedImage imagePreview;
+                imagePreview = ImageIO.read(imageFile);
+                if (entity.equals("clientes")) {
+                    lblClienteFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblClienteFoto.getWidth(), lblClienteFoto.getHeight(), Image.SCALE_SMOOTH)));
+                } else {
+                    lblEjercicioFoto.setIcon(new ImageIcon(imagePreview.getScaledInstance(lblEjercicioFoto.getWidth(), lblEjercicioFoto.getHeight(), Image.SCALE_SMOOTH)));
                 }
-            } catch (FTPControllerException | ConfigurationControllerException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+
+            } catch (IOException | ConfigurationControllerException ex) {
+                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             }
         };
+    }
+
+    private void prepareForUpdate(Object selectedValue) {
+        if (selectedValue == null) {
+            return;
+        }
+        if (selectedValue instanceof Ejercicio e) {
+            NewUpdateEjercicio.getInstance(this, e).setVisible(true);
+        }
     }
 
     private void clearEjercicioFields() {
@@ -862,6 +902,14 @@ public class Principal extends javax.swing.JFrame {
         txtClientePeso.setText("");
         listModelRelacion.removeAllElements();
         lstClienteRelacion.setModel(listModelRelacion);
+    }
+
+    public Icon sendIcon(Object o) {
+        if (o instanceof Cliente c) {
+            return lblClienteFoto.getIcon();
+        } else {
+            return lblEjercicioFoto.getIcon();
+        }
     }
 
 }
