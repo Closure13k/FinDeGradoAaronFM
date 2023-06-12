@@ -38,6 +38,7 @@ public class FTPController {
      */
     private FTPController() throws FTPControllerException, ConfigurationControllerException {
         try {
+            configurationController = ConfigurationController.getInstance();
             ftp = new FTPClient();
             connect();
         } catch (FTPControllerException e) {
@@ -108,32 +109,26 @@ public class FTPController {
             if (!ftp.storeFile(imageName, inputStream)) {
                 throw new FTPControllerException("No se pudo subir la imagen.");
             }
-            return String.join("/", ftpFolder, imageName);
+            return imageName;
         } catch (IOException e) {
             throw new FTPControllerException(e.getMessage());
         }
     }
 
-    public InputStream downloadImage(String ftpFolder, String imageName) throws FTPControllerException {
+    public File downloadImage(String ftpFolder, String imageName) throws FTPControllerException {
         try {
-<<<<<<< HEAD
-
-            if (!ftp.changeWorkingDirectory(ftpFolder)) {
-                //throw new FTPControllerException("No se pudo acceder a la carpeta.");
+            if (!ftp.printWorkingDirectory().contains(ftpFolder)) {
+                if (!ftp.changeWorkingDirectory(ftpFolder)) {
+                    throw new FTPControllerException("No se pudo acceder a la carpeta.");
+                }
             }
-
-            InputStream fileStream = ftp.retrieveFileStream(imageName);
-            return fileStream;
-=======
-            if (!ftp.changeWorkingDirectory(ftpFolder)) {
-                throw new FTPControllerException("No se pudo acceder a la carpeta.");
-            }
-            File imageFile = new File(imageName);
+            File imageFile = File.createTempFile(imageName, null);
+            imageFile.deleteOnExit();
             if (!ftp.retrieveFile(imageName, new FileOutputStream(imageFile))) {
                 throw new FTPControllerException("No se pudo descargar la imagen.");
             }
             return imageFile;
->>>>>>> parent of 9d37fe5 (Update FTPController.java)
+
         } catch (IOException e) {
             throw new FTPControllerException(e.getMessage());
         }
