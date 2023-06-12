@@ -13,7 +13,7 @@ import static model.entity.ClienteEntity.*;
  * @author AaronFM
  */
 public class Cliente {
-    
+
     private int idCliente;
     private String nickname;
     private String fotoPerfil;
@@ -21,7 +21,7 @@ public class Cliente {
     private float altura;
     private float peso;
 
-    public static Cliente fromResultSet(ResultSet rs) throws SQLException{
+    public static Cliente fromResultSet(ResultSet rs) throws SQLException {
         Cliente cliente = new Cliente();
         cliente.setIdCliente(rs.getInt(ID_CLIENTE));
         cliente.setNickname(rs.getString(NICKNAME));
@@ -31,10 +31,21 @@ public class Cliente {
         cliente.setFotoPerfil(rs.getString(FOTO_PERFIL));
         return cliente;
     }
-    
+
+    public static Cliente forUpdate(Cliente c) {
+        Cliente cliente = new Cliente();
+        cliente.setIdCliente(c.getIdCliente());
+        cliente.setNickname(c.getNickname());
+        cliente.setNombreApellidos(c.getNombreApellidos());
+        cliente.setAltura(c.getAltura());
+        cliente.setPeso(c.getPeso());
+        cliente.setFotoPerfil(c.getFotoPerfil());
+        return cliente;
+    }
+
     public Cliente() {
     }
-    
+
     //<editor-fold defaultstate="collapsed" desc="Getters y Setters">
     public int getIdCliente() {
         return idCliente;
@@ -87,16 +98,14 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "Cliente{" 
-                + "idCliente=" + idCliente 
-                + ", nickname=" + nickname 
-                + ", nombreApellidos=" + nombreApellidos 
-                + ", altura=" + altura 
-                + ", peso=" + peso 
-                + ", fotoPerfil=" + fotoPerfil 
+        return "Cliente{"
+                + "idCliente=" + idCliente
+                + ", nickname=" + nickname
+                + ", nombreApellidos=" + nombreApellidos
+                + ", altura=" + altura
+                + ", peso=" + peso
+                + ", fotoPerfil=" + fotoPerfil
                 + '}';
     }
-    
-    
-    
+
 }
