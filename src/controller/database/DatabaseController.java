@@ -63,7 +63,6 @@ public class DatabaseController {
             return;
         }
         String ip = "jdbc:mysql://" + configurationController.getDatabaseIP() +":"+ configurationController.getDatabasePort() + "/TFG";
-        System.out.println(ip);
         connection = DriverManager.getConnection(
                 ip,
                 configurationController.getDatabaseUser(),
