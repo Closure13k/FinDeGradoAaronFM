@@ -28,6 +28,17 @@ public class Ejercicio {
         return ejercicio;
     }
 
+    public static Ejercicio forUpdate(Ejercicio e) {
+        Ejercicio ejercicio = new Ejercicio();
+        ejercicio.setIdEjercicio(e.getIdEjercicio());
+        ejercicio.setTipo(e.getTipo());
+        ejercicio.setFotoEjercicio(e.getFotoEjercicio());
+        ejercicio.setInstrucciones(e.getInstrucciones());
+        ejercicio.setRecord(e.getRecord());
+        ejercicio.setPromedio(e.getPromedio());
+        return ejercicio;
+    }
+
     public Ejercicio() {
     }
 
@@ -83,17 +94,14 @@ public class Ejercicio {
 
     @Override
     public String toString() {
-        return "Ejercicio{" 
-                + "idEjercicio=" + idEjercicio 
-                + ", tipo=" + tipo 
-                + ", fotoEjercicio=" + fotoEjercicio 
-                + ", instrucciones=" + instrucciones 
-                + ", record=" + record 
-                + ", promedio=" + promedio 
+        return "Ejercicio{"
+                + "idEjercicio=" + idEjercicio
+                + ", tipo=" + tipo
+                + ", fotoEjercicio=" + fotoEjercicio
+                + ", instrucciones=" + instrucciones
+                + ", record=" + record
+                + ", promedio=" + promedio
                 + '}';
     }
 
-    
-    
-    
 }
