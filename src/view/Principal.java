@@ -939,7 +939,7 @@ public class Principal extends javax.swing.JFrame {
     
     /**
      * Prepara la entidad seleccionada en los detalles para su borrado.
-     *
+     * 
      * @param selectedValue
      */
     private Runnable deleteEntity(Object selectedValue) {
