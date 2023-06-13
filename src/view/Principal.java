@@ -726,19 +726,19 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnAddRelacionEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRelacionEjercicioActionPerformed
-        
+        openRelacionDialog(lstData.getSelectedValue());
     }//GEN-LAST:event_btnAddRelacionEjercicioActionPerformed
 
     private void btnRemoveRelacionEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRelacionEjercicioActionPerformed
-        
+
     }//GEN-LAST:event_btnRemoveRelacionEjercicioActionPerformed
 
     private void btnAddRelacionClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRelacionClienteActionPerformed
-        
+        openRelacionDialog(lstData.getSelectedValue());
     }//GEN-LAST:event_btnAddRelacionClienteActionPerformed
 
     private void btnRemoveRelacionClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRelacionClienteActionPerformed
-        
+
     }//GEN-LAST:event_btnRemoveRelacionClienteActionPerformed
 
     public static void main(String args[]) {
@@ -924,6 +924,19 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    
+    private void openRelacionDialog(Object selectedValue) {
+        if (selectedValue == null) {
+            return;
+        }
+        if (selectedValue instanceof Ejercicio e) {
+            NewRelacion.getInstance(this, null, e).setVisible(true);
+        }
+        if (selectedValue instanceof Cliente c) {
+            NewRelacion.getInstance(this, c, null).setVisible(true);
+        }
+    }
+    
     /**
      * Prepara la entidad seleccionada en los detalles para su borrado.
      *
@@ -1132,4 +1145,5 @@ public class Principal extends javax.swing.JFrame {
             return lblEjercicioFoto.getIcon();
         }
     }
+
 }
