@@ -430,13 +430,8 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
                     public void removeUpdate(DocumentEvent e) {
                         applyChange();
                     }
-
-                    /**
-                     * Solo gestiona cambios en el estilo.
-                     */
                     @Override
                     public void changedUpdate(DocumentEvent e) {
-                        //Ignoramos.
                     }
 
                     private void applyChange() {
@@ -458,12 +453,8 @@ public class NewUpdateEjercicio extends javax.swing.JDialog {
                         applyChange();
                     }
 
-                    /**
-                     * Solo gestiona cambios en el estilo.
-                     */
                     @Override
                     public void changedUpdate(DocumentEvent e) {
-                        //Ignoramos.
                     }
 
                     private void applyChange() {
