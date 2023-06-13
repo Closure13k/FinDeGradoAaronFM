@@ -11,8 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -229,6 +227,7 @@ public class NewRelacion extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_cmbEjercicioActionPerformed
 
+    //<editor-fold defaultstate="collapsed" desc="Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSave;
@@ -262,7 +261,14 @@ public class NewRelacion extends javax.swing.JDialog {
     private javax.swing.JTextField txtPeso;
     private javax.swing.JTextField txtSeries;
     // End of variables declaration//GEN-END:variables
-
+    //</editor-fold>
+    
+    /**
+     * Carga los combos con los clientes y ejercicios.
+     * <br>
+     * En base a quien abrió el dialog, se pondrá al cliente o ejercicio pasado
+     * como primera opción.
+     */
     private void loadCombos() {
         try {
             //Cargamos los combos.
@@ -293,6 +299,9 @@ public class NewRelacion extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Verifiers para asegurar datos.
+     */
     private void addInputVerifiers() {
         txtSeries.setInputVerifier(
                 new NumericInputVerifier(false, 255, lblSeries.getText(), btnSave)
@@ -302,6 +311,10 @@ public class NewRelacion extends javax.swing.JDialog {
         );
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Document Listeners">
+    /**
+     * Listeners para actualizar el objeto.
+     */
     private void addDocumentListeners() {
         txtPeso.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -374,10 +387,15 @@ public class NewRelacion extends javax.swing.JDialog {
             }
         });
     }
+    //</editor-fold>
 
+    /**
+     * Carga los datos.
+     */
     private void prepareFields() {
         txtSeries.setText(clienteEjercicio.getSeries() + "");
         txtPeso.setText(clienteEjercicio.getPeso() + "");
         txtArComentario.setText(clienteEjercicio.getComentario());
+        dateChooser.setDate(new Date());
     }
 }
