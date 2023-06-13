@@ -406,8 +406,7 @@ public class NewUpdateCliente extends javax.swing.JDialog {
 
     private void addInputVerifiers() {
         txtClienteNickname.setInputVerifier(
-                new RestrictedLengthVerifier(false, 30, lblClienteNickname.getText(), btnSave
-                )
+                new RestrictedLengthVerifier(false, 30, lblClienteNickname.getText(), btnSave)
         );
         txtClienteNombre.setInputVerifier(
                 new RestrictedLengthVerifier(false, 150, lblClienteNombre.getText(), btnSave)
@@ -519,7 +518,6 @@ public class NewUpdateCliente extends javax.swing.JDialog {
     //</editor-fold>
 
     private void actionButtonsEnabledState(boolean b) {
-        btnCancel.setEnabled(b);
         btnFoto.setEnabled(b);
         btnSave.setEnabled(b);
     }
