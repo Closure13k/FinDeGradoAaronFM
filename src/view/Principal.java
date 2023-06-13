@@ -1,6 +1,5 @@
 package view;
 
-import controller.config.ConfigurationController;
 import controller.data.ClienteController;
 import controller.data.ClienteEjercicioController;
 import controller.data.EjercicioController;
@@ -12,14 +11,9 @@ import controller.renderer.CustomListRenderers;
 import controller.ftp.FTPController;
 import java.awt.CardLayout;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
@@ -120,7 +114,8 @@ public class Principal extends javax.swing.JFrame {
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         menu = new javax.swing.JMenuBar();
         menuItemConfig = new javax.swing.JMenu();
-        menuItemHelp = new javax.swing.JMenu();
+        mnItAjustes = new javax.swing.JMenuItem();
+        mnItAyuda = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(920, 460));
@@ -650,10 +645,24 @@ public class Principal extends javax.swing.JFrame {
         getContentPane().add(pnlData, java.awt.BorderLayout.CENTER);
 
         menuItemConfig.setText("Ajustes");
-        menu.add(menuItemConfig);
 
-        menuItemHelp.setText("Ayuda");
-        menu.add(menuItemHelp);
+        mnItAjustes.setText("Ajustes");
+        mnItAjustes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnItAjustesActionPerformed(evt);
+            }
+        });
+        menuItemConfig.add(mnItAjustes);
+
+        mnItAyuda.setText("Ayuda");
+        mnItAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnItAyudaActionPerformed(evt);
+            }
+        });
+        menuItemConfig.add(mnItAyuda);
+
+        menu.add(menuItemConfig);
 
         setJMenuBar(menu);
 
@@ -708,11 +717,10 @@ public class Principal extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         runTask(() -> {
-            dispose();
             try {
-                ConfigurationController.getInstance().storeAppConfiguration();
                 DatabaseController.getInstance().disconnect();
                 FTPController.getInstance().disconnect();
+                dispose();
                 System.exit(0);
             } catch (EntityControllersException | ConfigurationControllerException | FTPControllerException ex) {
                 System.exit(1);
@@ -746,6 +754,14 @@ public class Principal extends javax.swing.JFrame {
             runTask(deleteRelacion(selectedValue));
         }
     }//GEN-LAST:event_btnRemoveRelacionClienteActionPerformed
+
+    private void mnItAjustesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnItAjustesActionPerformed
+        AppSettings.getInstance(this).setVisible(true);
+    }//GEN-LAST:event_mnItAjustesActionPerformed
+
+    private void mnItAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnItAyudaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mnItAyudaActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -833,7 +849,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JList<Object> lstEjercicioRelacion;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenu menuItemConfig;
-    private javax.swing.JMenu menuItemHelp;
+    private javax.swing.JMenuItem mnItAjustes;
+    private javax.swing.JMenuItem mnItAyuda;
     private javax.swing.JPanel pnlClienteDetails;
     private javax.swing.JPanel pnlClienteFoto;
     private javax.swing.JSplitPane pnlData;
