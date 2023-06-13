@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='ISO-8859-1'  ?>
+
+<toc version="1.0">
+    
+  <tocitem text="Principal" target="index"/>
+  
+  <tocitem text="Altas" target="altas"/>
+  <tocitem text="Bajas" target= "bajas"/>
+  <tocitem text="Modificaciones" target= "modificaciones"/>
+  <tocitem text="Ajustes" target= "ajustes"/>
+  
+</toc>
