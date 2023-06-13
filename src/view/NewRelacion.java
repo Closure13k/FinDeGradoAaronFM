@@ -1,6 +1,7 @@
 package view;
 
 import controller.data.ClienteController;
+import controller.data.ClienteEjercicioController;
 import controller.data.EjercicioController;
 import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
@@ -12,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import model.Cliente;
@@ -38,6 +40,7 @@ public class NewRelacion extends javax.swing.JDialog {
         instance.ejercicio = e;
         instance.clienteEjercicio = new ClienteEjercicio();
         instance.loadCombos();
+        instance.prepareFields();
 
         return instance;
     }
@@ -47,7 +50,6 @@ public class NewRelacion extends javax.swing.JDialog {
         initComponents();
         cmbCliente.setRenderer(CustomListRenderers.INSTANCE);
         cmbEjercicio.setRenderer(CustomListRenderers.INSTANCE);
-        dateChooser.setDate(new Date());
     }
 
     @SuppressWarnings("unchecked")
@@ -195,12 +197,22 @@ public class NewRelacion extends javax.swing.JDialog {
         if (date != null) {
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
             clienteEjercicio.setFecha(sqlDate);
+            principal.runTask(() -> {
+                try {
+                    ClienteEjercicioController.getInstance().addClienteEjercicio(clienteEjercicio);
+                    JOptionPane.showMessageDialog(rootPane, "Insertado con éxito.");
+                    dispose();
+                } catch (EntityControllersException | ConfigurationControllerException ex) {
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                }
+            });
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Asigna una fecha desplegando el calendario.");
         }
-        System.out.println(clienteEjercicio);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-
+        dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void cmbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClienteActionPerformed
@@ -341,5 +353,31 @@ public class NewRelacion extends javax.swing.JDialog {
                 }
             }
         });
+        txtArComentario.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                applyChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                applyChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //Ignoramos.
+            }
+
+            private void applyChange() {
+                clienteEjercicio.setComentario(txtArComentario.getText());
+            }
+        });
+    }
+
+    private void prepareFields() {
+        txtSeries.setText(clienteEjercicio.getSeries() + "");
+        txtPeso.setText(clienteEjercicio.getPeso() + "");
+        txtArComentario.setText(clienteEjercicio.getComentario());
     }
 }
