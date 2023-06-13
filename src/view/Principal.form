@@ -8,11 +8,24 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Ajustes"/>
           </Properties>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="menuItemHelp">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Ayuda"/>
-          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mnItAjustes">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Ajustes"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnItAjustesActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnItAyuda">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Ayuda"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnItAyudaActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
       </SubComponents>
     </Menu>
