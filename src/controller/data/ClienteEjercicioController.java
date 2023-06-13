@@ -19,12 +19,11 @@ import java.util.stream.Collectors;
 
 import static controller.exception.SQLExceptionController.readSQLException;
 
-
 public class ClienteEjercicioController {
+
     private static ClienteEjercicioController instance;
 
     private DatabaseController databaseController;
-    private List<ClienteEjercicio> listadoClienteEjercicio;
 
     /**
      * Singleton del controlador para no crear múltiples instancias.
@@ -43,39 +42,29 @@ public class ClienteEjercicioController {
     }
 
     /**
-     * Recoge el listado del controlador.
-     *
-     * @return el listado.
-     */
-    public List<ClienteEjercicio> getListadoClienteEjercicio() throws EntityControllersException {
-        listadoClienteEjercicio = getAllClienteEjercicio();
-        return listadoClienteEjercicio;
-    }
-
-    /**
      * Actualiza la lista de ejercicios a usar y luego filtra dentro de la
-     * propia lista.
-     * <br> Se gestionará la acción en la llamada del método.
+     * propia lista.<br> Se gestionará la acción en la llamada del método.
+     *
+     * @param idCliente
+     * @return
+     * @throws controller.exception.EntityControllersException
      */
     public List<ClienteEjercicio> getEjerciciosByClienteId(int idCliente) throws EntityControllersException {
-        if (listadoClienteEjercicio == null) {
-            getListadoClienteEjercicio();
-        }
-        return listadoClienteEjercicio.stream()
+        return getAllClienteEjercicio().stream()
                 .filter(clienteEjercicio -> clienteEjercicio.getCliente().getIdCliente() == idCliente)
                 .collect(Collectors.toList());
     }
 
     /**
      * Actualiza la lista de ejercicios a usar y luego filtra dentro de la
-     * propia lista.
-     * <br> Se gestionará la acción en la llamada del método.
+     * propia lista.<br> Se gestionará la acción en la llamada del método.
+     *
+     * @param idEjercicio
+     * @return
+     * @throws controller.exception.EntityControllersException
      */
     public List<ClienteEjercicio> getClientesByEjercicioId(int idEjercicio) throws EntityControllersException {
-        if (listadoClienteEjercicio == null) {
-            getListadoClienteEjercicio();
-        }
-        return listadoClienteEjercicio.stream()
+        return getAllClienteEjercicio().stream()
                 .filter(clienteEjercicio -> clienteEjercicio.getEjercicio().getIdEjercicio() == idEjercicio)
                 .collect(Collectors.toList());
     }
@@ -88,8 +77,7 @@ public class ClienteEjercicioController {
      */
     private List<ClienteEjercicio> getAllClienteEjercicio() throws EntityControllersException {
         Connection dbCon = databaseController.getConnection();
-        try (var ps = dbCon.prepareStatement(ClienteEjercicioEntity.selectQuery());
-             var rs = ps.executeQuery()) {
+        try (var ps = dbCon.prepareStatement(ClienteEjercicioEntity.selectQuery()); var rs = ps.executeQuery()) {
             List<ClienteEjercicio> listado = new ArrayList<>();
             if (rs.next()) {
                 do {
@@ -137,6 +125,7 @@ public class ClienteEjercicioController {
      * Actualiza un cliente_ejercicio en la base de datos.
      * <br>
      * Se actualiza por el id del cliente y del ejercicio.
+     *
      * @param clienteEjercicio el cliente_ejercicio a actualizar.
      * @return el mismo.
      * @throws EntityControllersException con el mensaje de error ya reconocido.
@@ -153,11 +142,11 @@ public class ClienteEjercicioController {
         }
     }
 
-
     /**
      * Borra un cliente_ejercicio de la base de datos.
      * <br>
      * Se borra por el id del cliente, del ejercicio y la fecha.
+     *
      * @param clienteEjercicio el cliente_ejercicio a borrar.
      * @return el mismo.
      * @throws EntityControllersException con el mensaje de error ya reconocido.
@@ -176,12 +165,11 @@ public class ClienteEjercicioController {
         }
     }
 
-
     /**
      * Prepara el statement para insertar.
      *
      * @param clienteEjercicio el cliente_ejercicio a insertar.
-     * @param ps               el PreparedStatement.
+     * @param ps el PreparedStatement.
      * @throws SQLException si hay algún error durante el proceso.
      */
     private void prepareInsert(ClienteEjercicio clienteEjercicio, PreparedStatement ps) throws SQLException {
@@ -197,7 +185,7 @@ public class ClienteEjercicioController {
      * Prepara el statement para actualizar.
      *
      * @param clienteEjercicio el cliente_ejercicio a actualizar.
-     * @param ps               el PreparedStatement.
+     * @param ps el PreparedStatement.
      * @throws SQLException si hay algún error durante el proceso.
      */
     private static void prepareUpdate(ClienteEjercicio clienteEjercicio, PreparedStatement ps) throws SQLException {
