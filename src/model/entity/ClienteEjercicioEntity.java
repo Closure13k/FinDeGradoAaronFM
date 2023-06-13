@@ -8,6 +8,7 @@ package model.entity;
  * @see model.ClienteEjercicio
  */
 public class ClienteEjercicioEntity {
+
     /**
      * Nombre de la tabla.
      */
@@ -27,7 +28,6 @@ public class ClienteEjercicioEntity {
 
     public static final String COMENTARIO = "comentario";
 
-
     /**
      * Devuelve la orden de inserción de ClienteEjercicio.
      * <br>
@@ -46,7 +46,7 @@ public class ClienteEjercicioEntity {
      */
     public static String insertQuery() {
         return "INSERT INTO " + CLIENTE_EJERCICIO
-                + " ("+ ID_CLIENTE
+                + " (" + ID_CLIENTE
                 + ", " + ID_EJERCICIO
                 + ", " + FECHA
                 + ", " + SERIES
@@ -77,6 +77,16 @@ public class ClienteEjercicioEntity {
     }
 
     /**
+     * Borrado en base a ID relacional.
+     * @param externalField
+     * @return 
+     */
+    public static String deleteBy(String externalField) {
+        return "DELETE FROM " + CLIENTE_EJERCICIO
+                + " WHERE " + externalField + " = ?";
+    }
+
+    /**
      * Orden de actualización de un cliente_ejercicio.
      * <br>
      * Los campos y sus tipos de datos son:
@@ -94,6 +104,7 @@ public class ClienteEjercicioEntity {
      * </ul>
      * <br>
      * El número de <b>parámetros para el prepared es 6</b>.
+     *
      * @return
      */
     public static String updateQuery() {
@@ -120,6 +131,7 @@ public class ClienteEjercicioEntity {
      * <li>peso: float</li>
      * <li>comentario: String</li>
      * </ul>
+     *
      * @return
      */
     public static String selectQuery() {
