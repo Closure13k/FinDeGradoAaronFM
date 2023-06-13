@@ -13,7 +13,11 @@ import java.awt.CardLayout;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.help.HelpSetException;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
@@ -28,6 +32,16 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() {
         initComponents();
+        try {
+            URL helpUrl = this.getClass().getResource("/help/help.hs");
+            HelpSet helpSet;
+            helpSet = new HelpSet(null, helpUrl);
+            HelpBroker helpBroker = helpSet.createHelpBroker();
+            helpBroker.enableHelpOnButton(mnItAyuda, "index", helpSet);
+        } catch (HelpSetException ex) {
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+        }
+
         cardLayout = (CardLayout) pnlDataDetails.getLayout();
         listModel = new DefaultListModel<>();
         listModelRelacion = new DefaultListModel<>();
@@ -1004,7 +1018,7 @@ public class Principal extends javax.swing.JFrame {
             try {
                 ClienteEjercicio deleted = ClienteEjercicioController.getInstance().deleteClienteEjercicio(clienteEjercicio);
                 listModelRelacion.removeElement(clienteEjercicio);
-                if(pnlClienteDetails.isShowing()){
+                if (pnlClienteDetails.isShowing()) {
                     lstClienteRelacion.setModel(listModelRelacion);
                 } else {
                     lstEjercicioRelacion.setModel(listModelRelacion);
