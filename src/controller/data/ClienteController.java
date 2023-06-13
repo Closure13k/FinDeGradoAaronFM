@@ -12,6 +12,9 @@ import model.Cliente;
 import model.entity.ClienteEntity;
 
 import static controller.exception.SQLExceptionController.readSQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.entity.ClienteEjercicioEntity;
 
 /**
  * Clase gestora de operaciones sobre la tabla Clientes.
@@ -23,13 +26,14 @@ public class ClienteController {
 
     private static ClienteController instance;
 
-    private DatabaseController databaseController;
-    private List<Cliente> listadoClientes;
+    private final DatabaseController databaseController;
 
     /**
      * Singleton del controlador para no crear múltiples instancias.
      *
      * @return el controlador.
+     * @throws controller.exception.EntityControllersException
+     * @throws controller.exception.ConfigurationControllerException
      */
     public static ClienteController getInstance() throws EntityControllersException, ConfigurationControllerException {
         if (instance == null) {
@@ -42,38 +46,6 @@ public class ClienteController {
         databaseController = DatabaseController.getInstance();
     }
 
-    /**
-     * Recoge el listado de clientes del controlador.
-     *
-     * @return el listado.
-     * @throws EntityControllersException si se produce un error en la consulta.
-     */
-    public List<Cliente> getListadoClientes() throws EntityControllersException {
-        listadoClientes = getAllClientes();
-        return listadoClientes;
-    }
-
-    /**
-     * Actualiza la lista de clientes a usar y luego filtra dentro de la propia
-     * lista.
-     * <br> Se gestionará la acción en la llamada del método.
-     *
-     * @param nickname Nickname del cliente a buscar.
-     * @return Optional de cliente. Este objeto envuelve a la clase, habilitando
-     * una serie de utilidades (.orElse, .orElseThrow, .map, etc.) para
-     * gestionar el objeto. Asegura los null-checks.
-     *
-     * @throws EntityControllersException si se produce un error en la consulta.
-     */
-    public Optional<Cliente> getClienteByNickname(String nickname) throws EntityControllersException {
-        if (listadoClientes == null) {
-            getListadoClientes();
-        }
-        return listadoClientes
-                .stream()
-                .filter(c -> c.getNickname().contains(nickname))
-                .findFirst();
-    }
 
     /**
      * Recupera toda la lista de clientes de la base de datos.
@@ -81,7 +53,7 @@ public class ClienteController {
      * @return Lista de clientes.
      * @throws EntityControllersException si se produce un error en la consulta.
      */
-    private List<Cliente> getAllClientes() throws EntityControllersException {
+    public List<Cliente> getAllClientes() throws EntityControllersException {
         Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(ClienteEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
             List<Cliente> clientes = new ArrayList<>();
@@ -166,14 +138,42 @@ public class ClienteController {
     }
 
     /**
+     * Borra recursivamente.
+     * @param cliente
+     * @return
+     * @throws EntityControllersException 
+     */
+    public Cliente deleteClienteRecursively(Cliente cliente) throws EntityControllersException {
+        Connection dbCon = databaseController.getConnection();
+        try (PreparedStatement relacionStatement = dbCon.prepareStatement(ClienteEjercicioEntity.deleteBy(ClienteEntity.ID_CLIENTE)); PreparedStatement clienteStatement = dbCon.prepareStatement(ClienteEntity.deleteQuery())) {
+            dbCon.setAutoCommit(false);
+            relacionStatement.setInt(1, cliente.getIdCliente());
+            relacionStatement.executeUpdate();
+            clienteStatement.setInt(1, cliente.getIdCliente());
+            clienteStatement.executeUpdate();
+            dbCon.commit();
+            dbCon.setAutoCommit(true);
+            return cliente;
+        } catch (SQLException ex) {
+            try {
+                dbCon.rollback();
+                dbCon.setAutoCommit(true);
+            } catch (SQLException ex1) {
+                throw new EntityControllersException(readSQLException(ex));
+            }
+            throw new EntityControllersException(readSQLException(ex));
+        }
+    }
+
+    /**
      * Para evitar repetir código en el insert y update. Ambos usan los cinco
      * campos para sus set/insert.
      * <br>
      *
-     * @param ps      El prepared sobre el que se trabaja.
+     * @param ps El prepared sobre el que se trabaja.
      * @param cliente
      * @throws SQLException Si hubiera algún fallo mientras se procesa el
-     *                      prepared.
+     * prepared.
      * @see ClienteEntity#insertQuery()
      */
     private void prepareInsertOrUpdate(final PreparedStatement ps, Cliente cliente) throws SQLException {
