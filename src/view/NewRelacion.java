@@ -5,6 +5,7 @@ import controller.data.EjercicioController;
 import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
 import controller.renderer.CustomListRenderers;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,19 +39,19 @@ public class NewRelacion extends javax.swing.JDialog {
         initComponents();
         cmbCliente.setRenderer(CustomListRenderers.INSTANCE);
         cmbEjercicio.setRenderer(CustomListRenderers.INSTANCE);
+        dateChooser.setDate(new Date());
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         pnlCombos = new javax.swing.JPanel();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         lblCliente = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 20), new java.awt.Dimension(20, 20), new java.awt.Dimension(20, 20));
         cmbCliente = new javax.swing.JComboBox<>();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 20), new java.awt.Dimension(40, 20), new java.awt.Dimension(40, 20));
         lblEjercicio = new javax.swing.JLabel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 20), new java.awt.Dimension(20, 20), new java.awt.Dimension(20, 20));
         cmbEjercicio = new javax.swing.JComboBox<>();
@@ -78,6 +79,7 @@ public class NewRelacion extends javax.swing.JDialog {
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         pnlCombos.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 5, 10));
         pnlCombos.setLayout(new javax.swing.BoxLayout(pnlCombos, javax.swing.BoxLayout.LINE_AXIS));
@@ -88,7 +90,7 @@ public class NewRelacion extends javax.swing.JDialog {
         pnlCombos.add(filler1);
 
         pnlCombos.add(cmbCliente);
-        pnlCombos.add(filler3);
+        pnlCombos.add(filler8);
 
         lblEjercicio.setText("Ejercicio");
         pnlCombos.add(lblEjercicio);
@@ -103,7 +105,7 @@ public class NewRelacion extends javax.swing.JDialog {
         pnlDetallesTodo.setLayout(new java.awt.BorderLayout());
 
         dateChooser.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        dateChooser.setDateFormatString("dd/mm/yyyy");
+        dateChooser.setDateFormatString("dd MMMM yyyy");
         pnlDetallesTodo.add(dateChooser, java.awt.BorderLayout.PAGE_START);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
@@ -147,18 +149,36 @@ public class NewRelacion extends javax.swing.JDialog {
         pnlButtons.add(filler10);
 
         btnCancel.setText("Cancelar");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
         pnlButtons.add(btnCancel);
         pnlButtons.add(filler11);
 
         btnSave.setText("Guardar");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
         pnlButtons.add(btnSave);
         pnlButtons.add(filler6);
 
         getContentPane().add(pnlButtons, java.awt.BorderLayout.PAGE_END);
 
-        setSize(new java.awt.Dimension(589, 337));
+        setSize(new java.awt.Dimension(622, 337));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        System.out.println(dateChooser.getDate());
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -171,11 +191,11 @@ public class NewRelacion extends javax.swing.JDialog {
     private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler12;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
