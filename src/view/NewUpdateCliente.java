@@ -5,18 +5,17 @@
 package view;
 
 import controller.data.ClienteController;
-import controller.data.EjercicioController;
 import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
 import controller.exception.FTPControllerException;
 import controller.ftp.FTPController;
 import controller.ftp.ImagePickerController;
+import controller.validation.NumericInputVerifier;
+import controller.validation.RestrictedLengthVerifier;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -343,6 +342,7 @@ public class NewUpdateCliente extends javax.swing.JDialog {
                 //Rehabilitamos botones.
                 actionButtonsEnabledState(true);
                 principal.runTask(principal.loadJListTask("cliente"));
+                
                 JOptionPane.showMessageDialog(rootPane, operationType.toString());
                 dispose();
             } catch (EntityControllersException | ConfigurationControllerException ex) {
@@ -405,10 +405,23 @@ public class NewUpdateCliente extends javax.swing.JDialog {
     }
 
     private void addInputVerifiers() {
+        txtClienteNickname.setInputVerifier(
+                new RestrictedLengthVerifier(false, 30, lblClienteNickname.getText(), btnSave
+                )
+        );
+        txtClienteNombre.setInputVerifier(
+                new RestrictedLengthVerifier(false, 150, lblClienteNombre.getText(), btnSave)
+        );
+        txtClienteAltura.setInputVerifier(
+                new NumericInputVerifier(true, 0, lblClienteAltura.getText(), btnSave)
+        );
+        txtClientePeso.setInputVerifier(
+                new NumericInputVerifier(true, 0, lblClientePeso.getText(), btnSave)
+        );
+
     }
 
     //<editor-fold defaultstate="collapsed" desc="Document Listeners para los setters. Mucho código.">
-//</editor-fold>
     private void addDocumentListeners() {
         txtClienteNickname.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -495,15 +508,15 @@ public class NewUpdateCliente extends javax.swing.JDialog {
 
             private void applyChange() {
                 try {
-                    float altura = Float.parseFloat(txtClienteAltura.getText().trim());
-                    cliente.setAltura(altura);
+                    float peso = Float.parseFloat(txtClientePeso.getText().trim());
+                    cliente.setPeso(peso);
                 } catch (NumberFormatException nfex) {
                     //Ignoramos. Gestionado en la validación.
                 }
             }
         });
-
     }
+    //</editor-fold>
 
     private void actionButtonsEnabledState(boolean b) {
         btnCancel.setEnabled(b);
