@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.Properties;
-import javax.naming.ConfigurationException;
 import javax.swing.JOptionPane;
 
 import static controller.exception.ConfigurationControllerException.*;
