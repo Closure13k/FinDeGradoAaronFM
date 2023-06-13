@@ -7,6 +7,7 @@ package controller.data;
 import controller.database.DatabaseController;
 import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
+import static controller.exception.SQLExceptionController.readSQLException;
 import model.Ejercicio;
 
 import java.sql.*;
@@ -16,7 +17,8 @@ import java.util.Optional;
 
 import model.entity.EjercicioEntity;
 
-import static controller.exception.SQLExceptionController.readSQLException;
+import model.entity.ClienteEjercicioEntity;
+import model.entity.ClienteEntity;
 
 /**
  * @author Administrador
@@ -25,13 +27,14 @@ public class EjercicioController {
 
     private static EjercicioController instance;
 
-    private DatabaseController databaseController;
-    private List<Ejercicio> listadoEjercicios;
+    private final DatabaseController databaseController;
 
     /**
      * Singleton del controlador para no crear múltiples instancias.
      *
      * @return el controlador.
+     * @throws controller.exception.EntityControllersException
+     * @throws controller.exception.ConfigurationControllerException
      */
     public static EjercicioController getInstance() throws EntityControllersException, ConfigurationControllerException {
         if (instance == null) {
@@ -45,42 +48,12 @@ public class EjercicioController {
     }
 
     /**
-     * Recoge el listado de ejercicios del controlador.
-     *
-     * @return el listado.
-     * @throws EntityControllersException si se produce un error en la consulta.
-     */
-    public List<Ejercicio> getListadoEjercicios() throws EntityControllersException {
-        listadoEjercicios = getAllEjercicios();
-        return listadoEjercicios;
-    }
-
-    /**
-     * Actualiza la lista de ejercicios a usar y luego filtra dentro de la
-     * propia lista.
-     * <br> Se gestionará la acción en la llamada del método.
-     *
-     * @param type Tipo de ejercicio a buscar.
-     * @return Optional de ejercicio.
-     * @throws EntityControllersException si se produce un error en la consulta.
-     */
-    public Optional<Ejercicio> getEjercicioByTipo(String type) throws EntityControllersException {
-        if (listadoEjercicios == null) {
-            getListadoEjercicios();
-        }
-        return listadoEjercicios
-                .stream()
-                .filter(e -> e.getTipo().contains(type))
-                .findFirst();
-    }
-
-    /**
      * Recupera toda la lista de ejercicios de la base de datos.
      *
      * @return Lista de ejercicios.
      * @throws EntityControllersException si se produce un error en la consulta.
      */
-    private List<Ejercicio> getAllEjercicios() throws EntityControllersException {
+    public List<Ejercicio> getAllEjercicios() throws EntityControllersException {
         Connection dbCon = databaseController.getConnection();
         try (PreparedStatement ps = dbCon.prepareStatement(EjercicioEntity.selectQuery()); ResultSet rs = ps.executeQuery()) {
             List<Ejercicio> ejercicios = new ArrayList<>();
@@ -160,6 +133,36 @@ public class EjercicioController {
         } catch (SQLException ex) {
             throw new EntityControllersException(readSQLException(ex));
         }
+    }
+
+    /**
+     * Borra recursivamente.
+     *
+     * @param ejercicio
+     * @return
+     * @throws EntityControllersException
+     */
+    public Ejercicio deleteEjercicioRecursively(Ejercicio ejercicio) throws EntityControllersException {
+        Connection dbCon = databaseController.getConnection();
+        try (PreparedStatement relacionStatement = dbCon.prepareStatement(ClienteEjercicioEntity.deleteBy(EjercicioEntity.ID_EJERCICIO)); PreparedStatement clienteStatement = dbCon.prepareStatement(EjercicioEntity.deleteQuery())) {
+            dbCon.setAutoCommit(false);
+            relacionStatement.setInt(1, ejercicio.getIdEjercicio());
+            relacionStatement.executeUpdate();
+            clienteStatement.setInt(1, ejercicio.getIdEjercicio());
+            clienteStatement.executeUpdate();
+            dbCon.commit();
+            dbCon.setAutoCommit(true);
+            return ejercicio;
+        } catch (SQLException ex) {
+            try {
+                dbCon.rollback();
+                dbCon.setAutoCommit(true);
+            } catch (SQLException ex1) {
+                throw new EntityControllersException(readSQLException(ex));
+            }
+            throw new EntityControllersException(readSQLException(ex));
+        }
+
     }
 
     /**
