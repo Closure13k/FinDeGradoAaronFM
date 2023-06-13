@@ -15,7 +15,11 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
@@ -73,12 +77,21 @@ public class Principal extends javax.swing.JFrame {
         txtClienteAltura = new javax.swing.JTextField();
         lblClientePeso = new javax.swing.JLabel();
         txtClientePeso = new javax.swing.JTextField();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        lstClienteRelacion = new javax.swing.JList<>();
         pnlClienteFoto = new javax.swing.JPanel();
         lblClienteFoto = new javax.swing.JLabel();
         btnEditCliente = new javax.swing.JButton();
         btnRemoveCliente = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        lstClienteRelacion = new javax.swing.JList<>();
+        jPanel2 = new javax.swing.JPanel();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        btnAddRelacionCliente = new javax.swing.JButton();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        btnRemoveRelacionCliente = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         pnlEjercicioDetails = new javax.swing.JPanel();
         lblEjercicioTipo = new javax.swing.JLabel();
         txtEjercicioTipo = new javax.swing.JTextField();
@@ -90,12 +103,21 @@ public class Principal extends javax.swing.JFrame {
         txtEjercicioRecord = new javax.swing.JTextField();
         lblEjercicioPromedio = new javax.swing.JLabel();
         txtEjercicioPromedio = new javax.swing.JTextField();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        lstEjercicioRelacion = new javax.swing.JList<>();
         pnlEjercicioFoto = new javax.swing.JPanel();
         lblEjercicioFoto = new javax.swing.JLabel();
         btnEditEjercicio = new javax.swing.JButton();
         btnRemoveEjercicio = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        lstEjercicioRelacion = new javax.swing.JList<>();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        btnAddRelacionEjercicio = new javax.swing.JButton();
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        btnRemoveRelacionEjercicio = new javax.swing.JButton();
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         menu = new javax.swing.JMenuBar();
         menuItemConfig = new javax.swing.JMenu();
         menuItemHelp = new javax.swing.JMenu();
@@ -103,13 +125,6 @@ public class Principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(920, 460));
         setPreferredSize(new java.awt.Dimension(920, 460));
-        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
-            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
-                formWindowGainedFocus(evt);
-            }
-            public void windowLostFocus(java.awt.event.WindowEvent evt) {
-            }
-        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -153,6 +168,7 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setMinimumSize(new java.awt.Dimension(100, 100));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(50, 50));
 
+        lstData.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         lstData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstData.setSelectionBackground(new java.awt.Color(255, 255, 255));
         lstData.setSelectionForeground(new java.awt.Color(255, 153, 0));
@@ -318,23 +334,6 @@ public class Principal extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlClienteDetails.add(txtClientePeso, gridBagConstraints);
 
-        lstClienteRelacion.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstClienteRelacion.setSelectionBackground(new java.awt.Color(255, 255, 255));
-        lstClienteRelacion.setSelectionForeground(new java.awt.Color(255, 153, 0));
-        jScrollPane3.setViewportView(lstClienteRelacion);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 484;
-        gridBagConstraints.ipady = 147;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
-        pnlClienteDetails.add(jScrollPane3, gridBagConstraints);
-
         pnlClienteFoto.setMinimumSize(new java.awt.Dimension(128, 128));
         pnlClienteFoto.setPreferredSize(new java.awt.Dimension(128, 128));
         pnlClienteFoto.setLayout(new java.awt.BorderLayout());
@@ -361,7 +360,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlClienteDetails.add(btnEditCliente, gridBagConstraints);
@@ -373,10 +372,61 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlClienteDetails.add(btnRemoveCliente, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        lstClienteRelacion.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        lstClienteRelacion.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstClienteRelacion.setSelectionBackground(new java.awt.Color(255, 255, 255));
+        lstClienteRelacion.setSelectionForeground(new java.awt.Color(255, 153, 0));
+        jScrollPane3.setViewportView(lstClienteRelacion);
+
+        jPanel1.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel2.add(filler6);
+
+        btnAddRelacionCliente.setText("Nuevo");
+        btnAddRelacionCliente.setMaximumSize(new java.awt.Dimension(100, 25));
+        btnAddRelacionCliente.setMinimumSize(new java.awt.Dimension(100, 25));
+        btnAddRelacionCliente.setPreferredSize(new java.awt.Dimension(100, 25));
+        btnAddRelacionCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddRelacionClienteActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnAddRelacionCliente);
+        jPanel2.add(filler7);
+
+        btnRemoveRelacionCliente.setText("Borrar");
+        btnRemoveRelacionCliente.setMaximumSize(new java.awt.Dimension(100, 25));
+        btnRemoveRelacionCliente.setMinimumSize(new java.awt.Dimension(100, 25));
+        btnRemoveRelacionCliente.setPreferredSize(new java.awt.Dimension(100, 25));
+        btnRemoveRelacionCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveRelacionClienteActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnRemoveRelacionCliente);
+        jPanel2.add(filler8);
+
+        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
+        jPanel1.add(jPanel3, java.awt.BorderLayout.LINE_END);
+        jPanel1.add(jPanel4, java.awt.BorderLayout.LINE_START);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        pnlClienteDetails.add(jPanel1, gridBagConstraints);
 
         pnlDataDetails.add(pnlClienteDetails, "cliente");
 
@@ -502,22 +552,6 @@ public class Principal extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlEjercicioDetails.add(txtEjercicioPromedio, gridBagConstraints);
 
-        lstEjercicioRelacion.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstEjercicioRelacion.setSelectionForeground(new java.awt.Color(255, 153, 0));
-        jScrollPane4.setViewportView(lstEjercicioRelacion);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 484;
-        gridBagConstraints.ipady = 147;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
-        pnlEjercicioDetails.add(jScrollPane4, gridBagConstraints);
-
         pnlEjercicioFoto.setLayout(new java.awt.BorderLayout());
 
         lblEjercicioFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -542,7 +576,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlEjercicioDetails.add(btnEditEjercicio, gridBagConstraints);
@@ -554,10 +588,60 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         pnlEjercicioDetails.add(btnRemoveEjercicio, gridBagConstraints);
+
+        jPanel5.setLayout(new java.awt.BorderLayout());
+
+        lstEjercicioRelacion.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        lstEjercicioRelacion.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstEjercicioRelacion.setSelectionForeground(new java.awt.Color(255, 153, 0));
+        jScrollPane4.setViewportView(lstEjercicioRelacion);
+
+        jPanel5.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+        jPanel5.add(jPanel6, java.awt.BorderLayout.LINE_END);
+        jPanel5.add(jPanel8, java.awt.BorderLayout.LINE_START);
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        jPanel7.setLayout(new javax.swing.BoxLayout(jPanel7, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel7.add(filler9);
+
+        btnAddRelacionEjercicio.setText("Nuevo");
+        btnAddRelacionEjercicio.setMaximumSize(new java.awt.Dimension(100, 25));
+        btnAddRelacionEjercicio.setMinimumSize(new java.awt.Dimension(100, 25));
+        btnAddRelacionEjercicio.setPreferredSize(new java.awt.Dimension(100, 25));
+        btnAddRelacionEjercicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddRelacionEjercicioActionPerformed(evt);
+            }
+        });
+        jPanel7.add(btnAddRelacionEjercicio);
+        jPanel7.add(filler10);
+
+        btnRemoveRelacionEjercicio.setText("Borrar");
+        btnRemoveRelacionEjercicio.setMaximumSize(new java.awt.Dimension(100, 25));
+        btnRemoveRelacionEjercicio.setMinimumSize(new java.awt.Dimension(100, 25));
+        btnRemoveRelacionEjercicio.setPreferredSize(new java.awt.Dimension(100, 25));
+        btnRemoveRelacionEjercicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveRelacionEjercicioActionPerformed(evt);
+            }
+        });
+        jPanel7.add(btnRemoveRelacionEjercicio);
+        jPanel7.add(filler11);
+
+        jPanel5.add(jPanel7, java.awt.BorderLayout.PAGE_END);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        pnlEjercicioDetails.add(jPanel5, gridBagConstraints);
 
         pnlDataDetails.add(pnlEjercicioDetails, "ejercicio");
 
@@ -573,7 +657,7 @@ public class Principal extends javax.swing.JFrame {
 
         setJMenuBar(menu);
 
-        setSize(new java.awt.Dimension(814, 497));
+        setSize(new java.awt.Dimension(787, 508));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -599,7 +683,7 @@ public class Principal extends javax.swing.JFrame {
     private void btnRemoveClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveClienteActionPerformed
         Object selectedValue = lstData.getSelectedValue();
         if (selectedValue != null) {
-            deleteEntity(selectedValue);
+            runTask(deleteEntity(selectedValue));
         }
     }//GEN-LAST:event_btnRemoveClienteActionPerformed
 
@@ -608,7 +692,10 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditEjercicioActionPerformed
 
     private void btnRemoveEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveEjercicioActionPerformed
-        // TODO add your handling code here:
+        Object selectedValue = lstData.getSelectedValue();
+        if (selectedValue != null) {
+            runTask(deleteEntity(selectedValue));
+        }
     }//GEN-LAST:event_btnRemoveEjercicioActionPerformed
 
     private void pnlClienteDetailsComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_pnlClienteDetailsComponentHidden
@@ -638,9 +725,21 @@ public class Principal extends javax.swing.JFrame {
         openInsertDialog();
     }//GEN-LAST:event_btnNewActionPerformed
 
-    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+    private void btnAddRelacionEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRelacionEjercicioActionPerformed
         
-    }//GEN-LAST:event_formWindowGainedFocus
+    }//GEN-LAST:event_btnAddRelacionEjercicioActionPerformed
+
+    private void btnRemoveRelacionEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRelacionEjercicioActionPerformed
+        
+    }//GEN-LAST:event_btnRemoveRelacionEjercicioActionPerformed
+
+    private void btnAddRelacionClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRelacionClienteActionPerformed
+        
+    }//GEN-LAST:event_btnAddRelacionClienteActionPerformed
+
+    private void btnRemoveRelacionClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRelacionClienteActionPerformed
+        
+    }//GEN-LAST:event_btnRemoveRelacionClienteActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -676,19 +775,37 @@ public class Principal extends javax.swing.JFrame {
 
     //<editor-fold defaultstate="collapsed" desc="Generated variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddRelacionCliente;
+    private javax.swing.JButton btnAddRelacionEjercicio;
     private javax.swing.JButton btnEditCliente;
     private javax.swing.JButton btnEditEjercicio;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnRemoveCliente;
     private javax.swing.JButton btnRemoveEjercicio;
+    private javax.swing.JButton btnRemoveRelacionCliente;
+    private javax.swing.JButton btnRemoveRelacionEjercicio;
     private javax.swing.JButton btnTableClientes;
     private javax.swing.JButton btnTableEjercicios;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler10;
+    private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
+    private javax.swing.Box.Filler filler9;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -759,8 +876,8 @@ public class Principal extends javax.swing.JFrame {
                 listModel.removeAllElements();
                 listModel.addAll(
                         isClienteTable
-                                ? ClienteController.getInstance().getListadoClientes()
-                                : EjercicioController.getInstance().getListadoEjercicios()
+                                ? ClienteController.getInstance().getAllClientes()
+                                : EjercicioController.getInstance().getAllEjercicios()
                 );
                 lstData.setModel(listModel);
 
@@ -812,8 +929,32 @@ public class Principal extends javax.swing.JFrame {
      *
      * @param selectedValue
      */
-    private void deleteEntity(Object selectedValue) {
+    private Runnable deleteEntity(Object selectedValue) {
+        return () -> {
+            try {
+                if (selectedValue instanceof Ejercicio e) {
+                    int response = JOptionPane.showConfirmDialog(rootPane, "Procedes a borrar:\n" + e.getTipo() + "\nSe borrarán todas las entradas de los clientes con este ejercicio.\nConfirmas?");
+                    if (response == 0) {
+                        Ejercicio deleted = EjercicioController.getInstance().deleteEjercicioRecursively(e);
+                        clearEjercicioFields();
+                        runTask(loadJListTask("ejercicio"));
+                        JOptionPane.showMessageDialog(rootPane, "Borrado: " + deleted.getTipo());
+                    }
+                }
+                if (selectedValue instanceof Cliente c) {
+                    int response = JOptionPane.showConfirmDialog(rootPane, "Procedes a borrar:\n" + c.getNickname() + "\nSe borrarán todas las entradas de los ejercicios con este cliente.\nConfirmas?");
+                    if (response == 0) {
+                        Cliente deleted = ClienteController.getInstance().deleteClienteRecursively(c);
+                        clearClienteFields();
+                        runTask(loadJListTask("cliente"));
+                        JOptionPane.showMessageDialog(rootPane, "Borrado: " + deleted.getNickname());
+                    }
+                }
 
+            } catch (EntityControllersException | ConfigurationControllerException ex) {
+                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+            }
+        };
     }
 
     /**
@@ -842,7 +983,6 @@ public class Principal extends javax.swing.JFrame {
                 listModelRelacion.addAll(ejercicios);
                 lstEjercicioRelacion.setModel(listModelRelacion);
             }
-
         } catch (EntityControllersException | ConfigurationControllerException ex) {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage());
         }
