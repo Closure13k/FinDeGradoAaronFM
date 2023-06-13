@@ -730,7 +730,10 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddRelacionEjercicioActionPerformed
 
     private void btnRemoveRelacionEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRelacionEjercicioActionPerformed
-
+        Object selectedValue = lstEjercicioRelacion.getSelectedValue();
+        if (selectedValue != null) {
+            runTask(deleteRelacion(selectedValue));
+        }
     }//GEN-LAST:event_btnRemoveRelacionEjercicioActionPerformed
 
     private void btnAddRelacionClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRelacionClienteActionPerformed
@@ -738,7 +741,10 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddRelacionClienteActionPerformed
 
     private void btnRemoveRelacionClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveRelacionClienteActionPerformed
-
+        Object selectedValue = lstClienteRelacion.getSelectedValue();
+        if (selectedValue != null) {
+            runTask(deleteRelacion(selectedValue));
+        }
     }//GEN-LAST:event_btnRemoveRelacionClienteActionPerformed
 
     public static void main(String args[]) {
@@ -924,7 +930,6 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
-    
     private void openRelacionDialog(Object selectedValue) {
         if (selectedValue == null) {
             return;
@@ -936,10 +941,10 @@ public class Principal extends javax.swing.JFrame {
             NewRelacion.getInstance(this, c, null).setVisible(true);
         }
     }
-    
+
     /**
      * Prepara la entidad seleccionada en los detalles para su borrado.
-     * 
+     *
      * @param selectedValue
      */
     private Runnable deleteEntity(Object selectedValue) {
@@ -967,6 +972,31 @@ public class Principal extends javax.swing.JFrame {
             } catch (EntityControllersException | ConfigurationControllerException ex) {
                 JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             }
+        };
+    }
+
+    /**
+     * Tarea que borra una entrada de relación.
+     *
+     * @param selectedValue
+     * @return
+     */
+    private Runnable deleteRelacion(Object selectedValue) {
+        return () -> {
+            ClienteEjercicio clienteEjercicio = (ClienteEjercicio) selectedValue;
+            try {
+                ClienteEjercicio deleted = ClienteEjercicioController.getInstance().deleteClienteEjercicio(clienteEjercicio);
+                listModelRelacion.removeElement(clienteEjercicio);
+                if(pnlClienteDetails.isShowing()){
+                    lstClienteRelacion.setModel(listModelRelacion);
+                } else {
+                    lstEjercicioRelacion.setModel(listModelRelacion);
+                }
+                JOptionPane.showMessageDialog(rootPane, "Borrado ejercicio realizado por: " + deleted.getCliente().getNickname() + "\nque fue: " + deleted.getEjercicio().getTipo() + "\na fecha: " + deleted.getFecha());
+            } catch (EntityControllersException | ConfigurationControllerException ex) {
+                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+            }
+
         };
     }
 
