@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<map version="1.0">  
+        <mapID target="index" url="pages/index.html" />
+        <mapID target="altas" url="pages/altas.html" />
+        <mapID target="bajas" url="pages/bajas.html" />
+        <mapID target="modificaciones" url="pages/modificaciones.html" />
+        <mapID target="ajustes" url="pages/ajustes.html" />
+</map>
