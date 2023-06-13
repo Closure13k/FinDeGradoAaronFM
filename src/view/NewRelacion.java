@@ -5,13 +5,17 @@ import controller.data.EjercicioController;
 import controller.exception.ConfigurationControllerException;
 import controller.exception.EntityControllersException;
 import controller.renderer.CustomListRenderers;
+import controller.validation.NumericInputVerifier;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import model.Cliente;
+import model.ClienteEjercicio;
 import model.Ejercicio;
 
 public class NewRelacion extends javax.swing.JDialog {
@@ -21,14 +25,18 @@ public class NewRelacion extends javax.swing.JDialog {
     private Principal principal;
     private Cliente cliente;
     private Ejercicio ejercicio;
+    private ClienteEjercicio clienteEjercicio;
 
     public static NewRelacion getInstance(Principal p, Cliente c, Ejercicio e) {
         if (instance == null) {
             instance = new NewRelacion(p, true);
+            instance.addInputVerifiers();
+            instance.addDocumentListeners();
         }
         instance.principal = p;
         instance.cliente = c;
         instance.ejercicio = e;
+        instance.clienteEjercicio = new ClienteEjercicio();
         instance.loadCombos();
 
         return instance;
@@ -89,6 +97,11 @@ public class NewRelacion extends javax.swing.JDialog {
         pnlCombos.add(lblCliente);
         pnlCombos.add(filler1);
 
+        cmbCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbClienteActionPerformed(evt);
+            }
+        });
         pnlCombos.add(cmbCliente);
         pnlCombos.add(filler8);
 
@@ -96,6 +109,11 @@ public class NewRelacion extends javax.swing.JDialog {
         pnlCombos.add(lblEjercicio);
         pnlCombos.add(filler2);
 
+        cmbEjercicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbEjercicioActionPerformed(evt);
+            }
+        });
         pnlCombos.add(cmbEjercicio);
         pnlCombos.add(filler4);
 
@@ -173,12 +191,31 @@ public class NewRelacion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        System.out.println(dateChooser.getDate());
+        Date date = dateChooser.getDate();
+        if (date != null) {
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+            clienteEjercicio.setFecha(sqlDate);
+        }
+        System.out.println(clienteEjercicio);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
 
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void cmbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClienteActionPerformed
+        Object item = cmbCliente.getSelectedItem();
+        if (item != null) {
+            clienteEjercicio.setCliente((Cliente) item);
+        }
+    }//GEN-LAST:event_cmbClienteActionPerformed
+
+    private void cmbEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEjercicioActionPerformed
+        Object item = cmbEjercicio.getSelectedItem();
+        if (item != null) {
+            clienteEjercicio.setEjercicio((Ejercicio) item);
+        }
+    }//GEN-LAST:event_cmbEjercicioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -216,6 +253,7 @@ public class NewRelacion extends javax.swing.JDialog {
 
     private void loadCombos() {
         try {
+            //Cargamos los combos.
             cmbCliente.removeAllItems();
             List<Cliente> allClientes = ClienteController.getInstance().getAllClientes();
             allClientes.forEach(cmbCliente::addItem);
@@ -223,6 +261,7 @@ public class NewRelacion extends javax.swing.JDialog {
             List<Ejercicio> allEjercicios = EjercicioController.getInstance().getAllEjercicios();
             allEjercicios.forEach(cmbEjercicio::addItem);
 
+            //Ponemos como primero elegido el parámetro pasado por getInstance()
             if (cliente != null) {
                 allClientes.stream()
                         .filter((c) -> cliente.getIdCliente() == c.getIdCliente())
@@ -235,9 +274,72 @@ public class NewRelacion extends javax.swing.JDialog {
                         .findFirst()
                         .ifPresent(cmbEjercicio::setSelectedItem);
             }
-
+            clienteEjercicio.setCliente((Cliente) cmbCliente.getSelectedItem());
+            clienteEjercicio.setEjercicio((Ejercicio) cmbEjercicio.getSelectedItem());
         } catch (EntityControllersException | ConfigurationControllerException ex) {
             Logger.getLogger(NewRelacion.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void addInputVerifiers() {
+        txtSeries.setInputVerifier(
+                new NumericInputVerifier(false, 255, lblSeries.getText(), btnSave)
+        );
+        txtPeso.setInputVerifier(
+                new NumericInputVerifier(true, 0, lblPeso.getText(), btnSave)
+        );
+    }
+
+    private void addDocumentListeners() {
+        txtPeso.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                applyChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                applyChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //Ignoramos.
+            }
+
+            private void applyChange() {
+                try {
+                    float peso = Float.parseFloat(txtPeso.getText().trim());
+                    clienteEjercicio.setPeso(peso);
+                } catch (NumberFormatException nfex) {
+                    //Ignoramos. Gestionado en la validación.
+                }
+            }
+        });
+        txtSeries.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                applyChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                applyChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //Ignoramos.
+            }
+
+            private void applyChange() {
+                try {
+                    int series = Integer.parseInt(txtSeries.getText().trim());
+                    clienteEjercicio.setSeries(series);
+                } catch (NumberFormatException nfex) {
+                    //Ignoramos. Gestionado en la validación.
+                }
+            }
+        });
     }
 }
