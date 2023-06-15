@@ -7,8 +7,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
- *
- * @author Administrador
+ * Verificador de entrada de datos para valores numéricos.
+ * @author AaronFM
  */
 public class NumericInputVerifier extends InputVerifier {
 
@@ -20,6 +20,13 @@ public class NumericInputVerifier extends InputVerifier {
     private final String label;
     private final JButton[] buttons;
 
+    /**
+     *
+     * @param isFloat
+     * @param maxLength
+     * @param label
+     * @param buttons
+     */
     public NumericInputVerifier(boolean isFloat, int maxLength, String label, JButton... buttons) {
         this.isFloat = isFloat;
         this.maxLength = maxLength;
@@ -27,6 +34,11 @@ public class NumericInputVerifier extends InputVerifier {
         this.buttons = buttons;
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     @Override
     public boolean verify(JComponent input) {
         JTextField textTipo = (JTextField) input;
