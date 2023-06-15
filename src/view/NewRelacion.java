@@ -18,6 +18,10 @@ import model.Cliente;
 import model.ClienteEjercicio;
 import model.Ejercicio;
 
+/**
+ *
+ * @author Administrador
+ */
 public class NewRelacion extends javax.swing.JDialog {
 
     private static NewRelacion instance;
@@ -27,6 +31,13 @@ public class NewRelacion extends javax.swing.JDialog {
     private Ejercicio ejercicio;
     private ClienteEjercicio clienteEjercicio;
 
+    /**
+     *
+     * @param p
+     * @param c
+     * @param e
+     * @return
+     */
     public static NewRelacion getInstance(Principal p, Cliente c, Ejercicio e) {
         if (instance == null) {
             instance = new NewRelacion(p, true);
