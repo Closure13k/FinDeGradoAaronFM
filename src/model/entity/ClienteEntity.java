@@ -8,13 +8,40 @@ package model.entity;
  * @see model.Cliente
  */
 public class ClienteEntity {
+
+    /**
+     *
+     */
     public static final String CLIENTES = "clientes";
+
+    /**
+     *
+     */
     public static final String ID_CLIENTE = "id_cliente";
 
+    /**
+     *
+     */
     public static final String NICKNAME = "nickname";
+
+    /**
+     *
+     */
     public static final String FOTO_PERFIL = "foto_perfil";
+
+    /**
+     *
+     */
     public static final String NOMBRE_APELLIDOS = "nombre_apellidos";
+
+    /**
+     *
+     */
     public static final String ALTURA = "altura";
+
+    /**
+     *
+     */
     public static final String PESO_CLIENTE = "peso_cliente";
 
     /**
@@ -71,9 +98,9 @@ public class ClienteEntity {
     }
 
     /**
-     * Devuelve la consulta para seleccionar todos los clientes de la base de datos.
-     * <br>Los campos y datos devueltos son:
-     * <ul><li>id_cliente: int</li></ul>
+     * Devuelve la consulta para seleccionar todos los clientes de la base de datos.<br>Los campos y datos devueltos son:
+    <ul><li>id_cliente: int</li></ul>
+     * @return
      * @see #insertQuery()
      */
     public static String selectQuery() {
