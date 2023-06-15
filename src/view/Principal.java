@@ -28,8 +28,15 @@ import model.Cliente;
 import model.ClienteEjercicio;
 import model.Ejercicio;
 
+/**
+ *
+ * @author Administrador
+ */
 public class Principal extends javax.swing.JFrame {
 
+    /**
+     * Pantalla inicial del programa.
+     */
     public Principal() {
         initComponents();
         try {
@@ -777,6 +784,10 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_mnItAyudaActionPerformed
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
