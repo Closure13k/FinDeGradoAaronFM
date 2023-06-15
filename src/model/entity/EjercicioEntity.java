@@ -13,18 +13,39 @@ package model.entity;
  */
 public class EjercicioEntity {
 
+    /**
+     *
+     */
     public static final String EJERCICIOS = "ejercicios";
 
+    /**
+     *
+     */
     public static final String ID_EJERCICIO = "id_ejercicio";
 
+    /**
+     *
+     */
     public static final String TIPO = "tipo";
 
+    /**
+     *
+     */
     public static final String FOTO = "foto_ejercicio";
 
+    /**
+     *
+     */
     public static final String INSTRUCCIONES = "instrucciones";
 
+    /**
+     *
+     */
     public static final String RECORD = "record";
 
+    /**
+     *
+     */
     public static final String PROMEDIO = "promedio";
 
 
@@ -84,10 +105,10 @@ public class EjercicioEntity {
 
     /**
      * Devuelve la consulta para seleccionar todos los ejercicios de la base de
-     * datos.
-     * <br>Los campos y datos devueltos son:
-     * <ul><li>id_ejercicio: int</li>
+     * datos.<br>Los campos y datos devueltos son:
+    <ul><li>id_ejercicio: int</li></ul>
      *
+     * @return 
      * @see #insertQuery()
      */
     public static String selectQuery() {
