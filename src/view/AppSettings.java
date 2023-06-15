@@ -19,6 +19,11 @@ public class AppSettings extends javax.swing.JDialog {
     private ConfigurationController configuration;
     private Principal principal;
 
+    /**
+     *
+     * @param principal
+     * @return
+     */
     public static AppSettings getInstance(Principal principal) {
         if (instance == null) {
             instance = new AppSettings(principal, true);
