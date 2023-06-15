@@ -9,11 +9,26 @@ import javax.swing.ListCellRenderer;
 import model.Cliente;
 import model.ClienteEjercicio;
 import model.Ejercicio;
-
+/**
+ * Renderiza de forma personalizada los campos de lista/combo.
+ * @author AaronFM
+ */
 public class CustomListRenderers extends JLabel implements ListCellRenderer<Object> {
     
+    /**
+     *
+     */
     public static final CustomListRenderers INSTANCE = new CustomListRenderers();
 
+    /**
+     *
+     * @param list
+     * @param value
+     * @param index
+     * @param isSelected
+     * @param cellHasFocus
+     * @return
+     */
     @Override
     public Component getListCellRendererComponent(JList<? extends Object> list,
             Object value, int index, boolean isSelected, boolean cellHasFocus) {
