@@ -45,6 +45,7 @@ public class DatabaseController {
      *
      * @return La instancia única de DatabaseController.
      * @throws controller.exception.EntityControllersException
+     * @throws controller.exception.ConfigurationControllerException
      */
     public static DatabaseController getInstance() throws EntityControllersException, ConfigurationControllerException {
         if (instance == null) {
