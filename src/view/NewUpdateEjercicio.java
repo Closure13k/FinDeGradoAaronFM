@@ -21,6 +21,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import model.Ejercicio;
 
+/**
+ *
+ * @author Administrador
+ */
 public class NewUpdateEjercicio extends javax.swing.JDialog {
 
     private static NewUpdateEjercicio instance;
