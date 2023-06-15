@@ -2,8 +2,16 @@ package controller.exception;
 
 import java.sql.SQLException;
 
+/**
+ *
+ * @author Administrador
+ */
 public class SQLExceptionController {
-
+    /**
+     * Identifica el tipo de excepción SQL y traduce el mensaje a un formato más amigable.
+     * @param sqle
+     * @return 
+     */
     public static String readSQLException(SQLException sqle) {
         final String message = sqle.getMessage();
         if (message.contains("link failure")) {
