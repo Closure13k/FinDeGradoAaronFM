@@ -41,7 +41,13 @@ public class ClienteController {
         }
         return instance;
     }
-
+    /**
+     * Inicializa el controlador de la tabla clientes.
+     * <br>
+     * Carga el controlador de la base de datos.
+     * @throws EntityControllersException En caso de no poder conectarse.
+     * @throws ConfigurationControllerException Si el controlador de configuración falla al iniciarse.
+     */
     private ClienteController() throws EntityControllersException, ConfigurationControllerException {
         databaseController = DatabaseController.getInstance();
     }
