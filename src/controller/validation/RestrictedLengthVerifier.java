@@ -6,6 +6,10 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+/**
+ * Verificador para campos de texto.
+ * @author AaronFM
+ */
 public class RestrictedLengthVerifier extends InputVerifier {
 
     private final boolean isNullable;
