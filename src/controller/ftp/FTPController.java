@@ -7,6 +7,10 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.*;
 
+/**
+ *
+ * @author Administrador
+ */
 public class FTPController {
 
     /**
@@ -23,6 +27,8 @@ public class FTPController {
      * Devuelve la instancia única de FTPController.
      *
      * @return La instancia única de FTPController.
+     * @throws controller.exception.FTPControllerException
+     * @throws controller.exception.ConfigurationControllerException
      */
     public static FTPController getInstance() throws FTPControllerException, ConfigurationControllerException {
         if (instance == null) {
@@ -47,8 +53,11 @@ public class FTPController {
     }
 
     /**
-     * Comprueba que sigue conectado al servidor FTP. Si no lo está, refresca la
-     * conexión.
+     * Comprueba que sigue conectado al servidor FTP.Si no lo está, refresca la
+ conexión.
+     * @return 
+     * @throws controller.exception.FTPControllerException 
+     * @throws controller.exception.ConfigurationControllerException
      */
     public FTPController refreshConnection() throws FTPControllerException, ConfigurationControllerException {
         if (!isConnected()) {
@@ -97,6 +106,14 @@ public class FTPController {
         }
     }
 
+    /**
+     *
+     * @param ftpFolder
+     * @param imageFile
+     * @param imageName
+     * @return
+     * @throws FTPControllerException
+     */
     public String uploadImage(String ftpFolder, File imageFile, String imageName) throws FTPControllerException {
         if (!imageFile.exists()) {
             throw new FTPControllerException("La imagen no existe.");
@@ -115,6 +132,13 @@ public class FTPController {
         }
     }
 
+    /**
+     *
+     * @param ftpFolder
+     * @param imageName
+     * @return
+     * @throws FTPControllerException
+     */
     public File downloadImage(String ftpFolder, String imageName) throws FTPControllerException {
         try {
             if (!ftp.printWorkingDirectory().contains(ftpFolder)) {
