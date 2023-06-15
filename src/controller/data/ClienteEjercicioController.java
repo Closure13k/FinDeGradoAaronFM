@@ -19,6 +19,10 @@ import java.util.stream.Collectors;
 
 import static controller.exception.SQLExceptionController.readSQLException;
 
+/**
+ *
+ * @author Administrador
+ */
 public class ClienteEjercicioController {
 
     private static ClienteEjercicioController instance;
@@ -29,6 +33,8 @@ public class ClienteEjercicioController {
      * Singleton del controlador para no crear múltiples instancias.
      *
      * @return el controlador.
+     * @throws controller.exception.EntityControllersException
+     * @throws controller.exception.ConfigurationControllerException
      */
     public static ClienteEjercicioController getInstance() throws EntityControllersException, ConfigurationControllerException {
         if (instance == null) {
@@ -37,6 +43,7 @@ public class ClienteEjercicioController {
         return instance;
     }
 
+    
     private ClienteEjercicioController() throws EntityControllersException, ConfigurationControllerException {
         databaseController = DatabaseController.getInstance();
     }
@@ -106,6 +113,7 @@ public class ClienteEjercicioController {
      * Inserta un cliente_ejercicio en la base de datos.
      *
      * @param clienteEjercicio el cliente_ejercicio a insertar.
+     * @return 
      * @throws EntityControllersException si hay algún error durante el proceso.
      */
     public ClienteEjercicio addClienteEjercicio(ClienteEjercicio clienteEjercicio) throws EntityControllersException {
