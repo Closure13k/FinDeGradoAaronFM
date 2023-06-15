@@ -18,14 +18,29 @@ public class ClienteEjercicioEntity {
      */
     public static final String ID_CLIENTE = "id_cliente";
 
+    /**
+     *
+     */
     public static final String ID_EJERCICIO = "id_ejercicio";
 
+    /**
+     *
+     */
     public static final String FECHA = "fecha";
 
+    /**
+     *
+     */
     public static final String SERIES = "series";
 
+    /**
+     *
+     */
     public static final String PESO = "peso";
 
+    /**
+     *
+     */
     public static final String COMENTARIO = "comentario";
 
     /**
