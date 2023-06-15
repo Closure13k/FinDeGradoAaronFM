@@ -16,6 +16,10 @@ import javax.swing.JOptionPane;
 
 import static controller.exception.ConfigurationControllerException.*;
 
+/**
+ *
+ * @author Administrador
+ */
 public class ConfigurationController {
 
     /**
@@ -92,6 +96,12 @@ public class ConfigurationController {
 
     //<editor-fold defaultstate="collapsed" desc="Getters y Setters para properties.">
     //Lista de propiedades. Getters.
+
+    /**
+     *
+     * @return
+     * @throws ConfigurationControllerException
+     */
     public String getDatabaseIP() throws ConfigurationControllerException {
         String ip = properties.getProperty("db.ip");
         if (ip == null || ip.isBlank()) {
@@ -100,6 +110,11 @@ public class ConfigurationController {
         return ip;
     }
 
+    /**
+     *
+     * @return
+     * @throws ConfigurationControllerException
+     */
     public String getDatabasePort() throws ConfigurationControllerException {
         String port = properties.getProperty("db.port");
         if (port == null || port.isBlank()) {
@@ -108,6 +123,11 @@ public class ConfigurationController {
         return port;
     }
 
+    /**
+     *
+     * @return
+     * @throws ConfigurationControllerException
+     */
     public String getDatabaseUser() throws ConfigurationControllerException {
         String user = properties.getProperty("db.user");
         if (user == null || user.isBlank()) {
@@ -116,6 +136,11 @@ public class ConfigurationController {
         return user;
     }
 
+    /**
+     *
+     * @return
+     * @throws ConfigurationControllerException
+     */
     public String getDatabasePassword() throws ConfigurationControllerException {
         String password = properties.getProperty("db.password");
         if (password == null || password.isBlank()) {
@@ -124,6 +149,11 @@ public class ConfigurationController {
         return password;
     }
 
+    /**
+     *
+     * @return
+     * @throws ConfigurationControllerException
+     */
     public String getFtpIP() throws ConfigurationControllerException {
         String ip = properties.getProperty("ftp.ip");
         if (ip == null || ip.isBlank()) {
@@ -132,6 +162,11 @@ public class ConfigurationController {
         return ip;
     }
 
+    /**
+     *
+     * @return
+     * @throws ConfigurationControllerException
+     */
     public int getFtpPort() throws ConfigurationControllerException {
         String port = properties.getProperty("ftp.port");
         if (port == null || port.isBlank()) {
@@ -144,6 +179,11 @@ public class ConfigurationController {
         }
     }
 
+    /**
+     *
+     * @return
+     * @throws ConfigurationControllerException
+     */
     public String getFtpUser() throws ConfigurationControllerException {
         String user = properties.getProperty("ftp.user");
         if (user == null || user.isBlank()) {
@@ -152,6 +192,11 @@ public class ConfigurationController {
         return user;
     }
 
+    /**
+     *
+     * @return
+     * @throws ConfigurationControllerException
+     */
     public String getFtpPassword() throws ConfigurationControllerException {
         String password = properties.getProperty("ftp.password");
         if (password == null || password.isBlank()) {
@@ -161,36 +206,65 @@ public class ConfigurationController {
     }
 
     /**
-     * Lista de propiedades. Setters.
+     * Lista de propiedades.Setters.
+     * @param ip
      */
     public void setDatabaseIP(String ip) {
         properties.setProperty("db.ip", ip);
     }
 
+    /**
+     *
+     * @param port
+     */
     public void setDatabasePort(String port) {
         properties.setProperty("db.port", port);
     }
 
+    /**
+     *
+     * @param user
+     */
     public void setDatabaseUser(String user) {
         properties.setProperty("db.user", user);
     }
 
+    /**
+     *
+     * @param password
+     */
     public void setDatabasePassword(String password) {
         properties.setProperty("db.password", password);
     }
 
+    /**
+     *
+     * @param ip
+     */
     public void setFtpIP(String ip) {
         properties.setProperty("ftp.ip", ip);
     }
 
+    /**
+     *
+     * @param port
+     */
     public void setFtpPort(String port) {
         properties.setProperty("ftp.port", port);
     }
 
+    /**
+     *
+     * @param user
+     */
     public void setFtpUser(String user) {
         properties.setProperty("ftp.user", user);
     }
 
+    /**
+     *
+     * @param password
+     */
     public void setFtpPassword(String password) {
         properties.setProperty("ftp.password", password);
     }
